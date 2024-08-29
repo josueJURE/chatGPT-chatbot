@@ -19,8 +19,8 @@ app.post("/", async (req, res) => {
 
     const myAssistant = await openai.beta.assistants.create({
       instructions:
-        "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
-      name: "Math Tutor",
+        "You are the best Chef in the world. You give advice to people onn how to cook",
+      name: "Personalised Chef",
       tools: [{ type: "code_interpreter" }],
       model: "gpt-4o",
     });
@@ -75,10 +75,17 @@ app.post("/", async (req, res) => {
       );
       for (const message of messages.data.reverse()) {
 
+        console.log({ojbect_response: message.content})
+        console.log({ojbect_data: message.data})
+
         console.log(`${message.role} > ${message.content[0].text.value}`);
 
       }
-      res.json({ message: messages.data });
+     
+        res.json({ message : messages.data});
+
+  
+      
     } else {
       console.log(run.status);
     }

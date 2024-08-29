@@ -11,12 +11,12 @@ btn.addEventListener("click", () => {
         },
         body: JSON.stringify({ input: userInput.value })
     })
-        .then((response) => {
-        response.json();
-    })
+        .then((response) => response.json())
         .then((data) => {
         if (data) {
-            responseElement.innerHTML = data.message;
+            // responseElement.innerHTML = data.message[0].content[0].text.value /// do I need the return keyword?
+            responseElement.innerHTML = data.message; /// do I need the return keyword?
+            console.log(data.message);
         }
     });
 });
