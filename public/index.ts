@@ -15,12 +15,19 @@ btn.addEventListener("click", () => {
         body: JSON.stringify({input: userInput.value})
     })
     .then((response) =>  response.json())
-    .then((data: { message: string, content: string, text: string} | void) => {
-        if (data) {
-            
+    .then((data: { message: any, content: any, text: any}) => {
+        if (data.message) {
+            for(let i = 0; i < data.message.length; i++) {
+                let newDiv = document.createElement("div");
+                let newContent = data.message[i].content[0].text.value;
+                console.log(newContent)
+                responseElement.innerHTML = newContent
+                
+            }
+                
             // responseElement.innerHTML = data.message[0].content[0].text.value /// do I need the return keyword?
-            responseElement.innerHTML = data.message /// do I need the return keyword?
-            console.log(data.message)
+        
+            console.log(typeof data.message)
         }
 
 
