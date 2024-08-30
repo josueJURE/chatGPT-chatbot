@@ -16,9 +16,10 @@ btn.addEventListener("click", () => {
         if (data.message) {
             for (let i = 0; i < data.message.length; i++) {
                 let newDiv = document.createElement("div");
-                let newContent = data.message[i].content[0].text.value;
+                let newContent = document.createTextNode(data.message[i].content[0].text.value);
+                newDiv.appendChild(newContent);
                 console.log(newContent);
-                responseElement.innerHTML = newContent;
+                responseElement.appendChild(newDiv);
             }
             // responseElement.innerHTML = data.message[0].content[0].text.value /// do I need the return keyword?
             console.log(typeof data.message);

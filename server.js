@@ -32,23 +32,32 @@ app.post("/", async (req, res) => {
   
 
   
-    const messageThread = await openai.beta.threads.create({
-      // previous conversations
-      messages: [
-        {
-          role: "user",
-          content: "tell me how to cook pasta"
-        },
-        {
-          role: "assistant",
-          content: "start by boiling some water"
-        }
-      ],
+    // const messageThread = await openai.beta.threads.create({
+    //   // previous conversations
+    //   messages: [
+    //     {
+    //       role: "user",
+    //       content: !input ? "I need advice on cooking" : input
+    //     },
+    //     {
+    //       role: "assistant",
+    //       content: "sure I'm here to help if you want any advice on cuisine"
+    //     }
+    //   ],
   
  
-    })
+    // })
+
+    const messageThread = await openai.beta.threads.create()
 
     const threadId =  messageThread.id
+
+    console.log({myThread: threadId})
+
+    // const myThread = await openai.beta.threads.retrieve(
+    //   threadId
+    // )
+    // console.log({myThread: myThread.tool_resources.code_interpreter})
 
     const message = await openai.beta.threads.messages.create(
       threadId ,
@@ -93,9 +102,6 @@ app.post("/", async (req, res) => {
     
     
 });
-
-
-
 
 
 

@@ -1,0 +1,16 @@
+.parent-container {
+    border: 1px red solid;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+}
+
+.main-container {
+    border: 1px black solid;
+    height: 100vh;
+    width: 500px;
+    border-radius: 15px;
+}
