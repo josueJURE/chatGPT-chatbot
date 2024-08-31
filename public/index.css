@@ -14,3 +14,16 @@
     width: 500px;
     border-radius: 15px;
 }
+
+
+
+.newDiv {
+    padding: 6px;
+    margin-top: 20px;
+    border: 1px black solid;
+    height: 70px;
+    width: fit-content;
+    border-radius: 15px;
+    overflow-y: scroll;
+    text-align: center;
+}
