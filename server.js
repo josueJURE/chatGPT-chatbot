@@ -12,105 +12,62 @@ const openai = new OpenAI({
 });
 
 
+// / Create a Map to store threads for each user
+const userThreads = new Map();
+
 app.post("/", async (req, res) => {
-    const { input } = req.body;
+    const { input, userId } = req.body;
     console.log(input);
 
+    let threadId;
+    if (userThreads.has(userId)) {
+        threadId = userThreads.get(userId);
+    } else {
+        const messageThread = await openai.beta.threads.create();
+        threadId = messageThread.id;
+        userThreads.set(userId, threadId);
+    }
 
     const myAssistant = await openai.beta.assistants.create({
-      instructions:
-        "You are the best Chef in the world. You give advice to people onn how to cook",
-      name: "Personalised Chef",
-      tools: [{ type: "code_interpreter" }],
-      model: "gpt-4o",
+        instructions: "You are the best Chef in the world. You give advice to people on how to cook",
+        name: "Personalised Chef",
+        tools: [{ type: "code_interpreter" }],
+        model: "gpt-4",
     });
-
-
-    const assistantId = myAssistant.id
-
-  
-  
-
-  
-    // const messageThread = await openai.beta.threads.create({
-    //   // previous conversations
-    //   messages: [
-    //     {
-    //       role: "user",
-    //       content: !input ? "I need advice on cooking" : input
-    //     },
-    //     {
-    //       role: "assistant",
-    //       content: "sure I'm here to help if you want any advice on cuisine"
-    //     }
-    //   ],
-  
- 
-    // })
-
-    const messageThread = await openai.beta.threads.create()
-
-    const threadId =  messageThread.id
-
-    console.log({myThread: threadId})
-
-    // const myThread = await openai.beta.threads.retrieve(
-    //   threadId
-    // )
-    // console.log({myThread: myThread.tool_resources.code_interpreter})
+    const assistantId = myAssistant.id;
 
     const message = await openai.beta.threads.messages.create(
-      threadId ,
-      {
-        role: "user",
-        content: input
-      }
+        threadId,
+        {
+            role: "user",
+            content: input
+        }
     );
-
-
-    console.log(message)
+    console.log(message);
 
     let run = await openai.beta.threads.runs.createAndPoll(
-      threadId,
-      { 
-        assistant_id: assistantId,
-        // instructions: "Please address the user as Jane Doe. The user has a premium account."
-      }
+        threadId,
+        { 
+            assistant_id: assistantId,
+        }
     );
 
     if (run.status === 'completed') {
-      const messages = await openai.beta.threads.messages.list(
-        run.thread_id
-      );
-      for (const message of messages.data.reverse()) {
-
-        console.log({ojbect_response: message.content})
-        console.log({ojbect_data: message.data})
-
-        console.log(`${message.role} > ${message.content[0].text.value}`);
-
-      }
-     
-        res.json({ message : messages.data});
-
-  
-      
+        const messages = await openai.beta.threads.messages.list(
+            run.thread_id
+        );
+        for (const message of messages.data.reverse()) {
+            console.log(`${message.role} > ${message.content[0].text.value}`);
+        }
+        res.json({ message: messages.data });
     } else {
-      console.log(run.status);
+        console.log(run.status);
+        res.status(500).json({ error: "Run did not complete successfully" });
     }
-
-    
-    
 });
-
-
-
-
 
 app.use(express.static((path.join(__dirname, "public"))))
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`)
 });
-
-
