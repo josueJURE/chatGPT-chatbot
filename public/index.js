@@ -15,24 +15,26 @@ btn.addEventListener("click", () => {
         .then((data) => {
         if (data.message) {
             for (let i = 0; i < data.message.length; i++) {
-                let newDiv = document.createElement("div");
-                newDiv.classList.add("newDiv");
-                let newContent = document.createTextNode(data.message[i].content[0].text.value);
-                newDiv.appendChild(newContent);
-                console.log(newContent);
-                responseElement.appendChild(newDiv);
+                buildElement(data.message[i].content[0].text.value);
             }
-            // responseElement.innerHTML = data.message[0].content[0].text.value /// do I need the return keyword?
             console.log(typeof data.message);
         }
     });
     emptyElement(userInput);
 });
+function buildElement(text) {
+    let newDiv = document.createElement("div");
+    newDiv.classList.add("newDiv");
+    let newContent = document.createTextNode(text);
+    newDiv.appendChild(newContent);
+    console.log(newContent);
+    responseElement.appendChild(newDiv);
+}
 function emptyElement(element) {
     element.value = "";
 }
-// 1  why empyElement() not working
-// 2 create a function for block of code within the for loop
+// 1  why empyElement() not working: DONE
+// 2 create a function for block of code within the for loop: DONE
 // 3 get rid of any types
 // 4 Api migth not remember context
 // 5 Clean up code in server.js file
