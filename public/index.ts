@@ -53,12 +53,7 @@ function buildElement(text: string, role: string) {
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
-    if(role === "assistant") {
-        newDiv.classList.add("userNewDiv")
-    } else {
-        newDiv.classList.add("assistantNewDiv")
-    }
-    
+    role === "assistant" ? newDiv.classList.add("userNewDiv") :  newDiv.classList.add("assistantNewDiv")
 }
 
 
