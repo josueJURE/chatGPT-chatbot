@@ -20,20 +20,26 @@ btn.addEventListener("click", () => {
         .then((data) => {
         if (data.message) {
             for (let i = 0; i < data.message.length; i++) {
-                buildElement(data.message[i].content[0].text.value);
+                buildElement(data.message[i].content[0].text.value, data.message[i].role);
+                console.log(data.message[i].role);
             }
-            console.log(typeof data.message);
         }
     });
     emptyElement(userInput);
 });
-function buildElement(text) {
+function buildElement(text, role) {
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
     let newContent = document.createTextNode(text);
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
+    if (role === "assistant") {
+        newDiv.classList.add("userNewDiv");
+    }
+    else {
+        newDiv.classList.add("assistantNewDiv");
+    }
 }
 function emptyElement(element) {
     element.value = "";

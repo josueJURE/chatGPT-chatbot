@@ -17,7 +17,9 @@
 
 
 
-.newDiv {
+.userNewDiv, 
+.assistantNewDiv
+ {
     padding: 6px;
     margin-top: 20px;
     border: 1px black solid;
@@ -26,4 +28,14 @@
     border-radius: 15px;
     overflow-y: scroll;
     text-align: center;
+    
 }
+
+.userNewDiv {
+    background-color: blue;
+}
+
+.assistantNewDiv {
+    background-color: brown;
+}
+

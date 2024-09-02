@@ -10,6 +10,7 @@ const userId = Math.random().toString(36).substring(7);
 
 interface ResponseData {
     message: Array<{
+        role: string;
       content: Array<{
         text: {
           value: string;
@@ -34,9 +35,10 @@ btn.addEventListener("click", () => {
     .then((data: ResponseData) => {
         if (data.message) {
             for(let i = 0; i < data.message.length; i++) {
-                buildElement(data.message[i].content[0].text.value);
+                buildElement(data.message[i].content[0].text.value, data.message[i].role);
+                console.log(data.message[i].role)
             }
-            console.log(typeof data.message)
+           
         }
     })
 
@@ -44,13 +46,18 @@ btn.addEventListener("click", () => {
 
 })
 
-function buildElement(text: string) {
+function buildElement(text: string, role: string) {
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
     let newContent = document.createTextNode(text);
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
+    if(role === "assistant") {
+        newDiv.classList.add("userNewDiv")
+    } else {
+        newDiv.classList.add("assistantNewDiv")
+    }
     
 }
 
