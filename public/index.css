@@ -24,7 +24,7 @@
     margin-top: 20px;
     border: 1px black solid;
     height: 70px;
-    width: fit-content;
+    width: 200px;
     border-radius: 15px;
     overflow-y: scroll;
     text-align: center;
@@ -33,9 +33,10 @@
 
 .userNewDiv {
     background-color: blue;
+    margin-left: 250px;
 }
 
 .assistantNewDiv {
     background-color: brown;
+    margin-left: 15px;
 }
-

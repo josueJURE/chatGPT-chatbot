@@ -35,11 +35,6 @@ function buildElement(text, role) {
     console.log(newContent);
     responseElement.appendChild(newDiv);
     role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
-    // if(role === "assistant") {
-    //     newDiv.classList.add("userNewDiv")
-    // } else {
-    //     newDiv.classList.add("assistantNewDiv")
-    // }
 }
 function emptyElement(element) {
     element.value = "";
