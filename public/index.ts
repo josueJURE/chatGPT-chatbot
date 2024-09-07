@@ -10,7 +10,11 @@ const userId = Math.random().toString(36).substring(7);
 
 
 
+interface ChatgptData {
+    text: string;
+    role: string;
 
+}
 
 
 
@@ -42,8 +46,13 @@ btn.addEventListener("click", () => {
     })
     .then((data: ResponseData) => {
         if (data.message) {
+            console.log(data)
             for(let i = 0; i < data.message.length; i++) {
-                buildElement(data.message[i].content[0].text.value, data.message[i].role);
+                const elementData: ChatgptData = {
+                    text: data.message[i].content[0].text.value,
+                    role: data.message[i].role,
+                }
+                buildElement(elementData);
                 console.log(data.message[i].role)
             }
            
@@ -54,15 +63,18 @@ btn.addEventListener("click", () => {
 
 })
 
-function buildElement(text: string, role: string) {
+function buildElement(props: ChatgptData) : void { /// could the argument I've passed in be an interface
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode(text);
+    let newContent = document.createTextNode(props.text);
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
-    role === "assistant" ? newDiv.classList.add("userNewDiv") :  newDiv.classList.add("assistantNewDiv");
-  
+    props.role === "assistant" ? newDiv.classList.add("userNewDiv") :  newDiv.classList.add("assistantNewDiv");
+}
+
+function throwError() {
+    throw new Error("something has gone wrong")
 }
 
 
@@ -70,6 +82,8 @@ function emptyElement(element: HTMLInputElement) : void  {
     element.value = ""
 
 }
+
+
 
 
 // 1  why empyElement() not working:                            DONE
@@ -82,8 +96,25 @@ function emptyElement(element: HTMLInputElement) : void  {
 
 
 
-// 3/09/24
-// 1 Section 7 generics
-// 2 Udemy Built-i generics lesson 95 try and use new Promise()
+// 6/09/24
+// turn empyElement() into a generic  function
+// try to use generics in ResponseData see Quiz: "Object Type With Holes" in EP
+// write a function instead of (() => { throw new Error('Something has gone wrong!'); })();
+// EXP TS
+// EXP JS Everyday TypeScript: The Object Type + Udemy lesson 96
+// EXP redo JS JavaScript Concurrency: Promises Are Asynchronous: We've now seen the core idea in promises: they schedule code to run later, and we can add callback functions that will run after a promise fulfills. This shows us why promises are called promises: when we create one, we're promising to provide a value at some point in the future.
+// EXP, TS: Exhaustiveness Checking redo it
+// function buildElement() pas an interface as an argument
 
 
+// const names: Array<string | number> = []
+
+
+// function merge<T, U>(objA: T, objB: U) {
+//     return Object.assign(objA, objB);
+// }
+
+// console.log(merge({name: "Max"}, {age: 30}))
+
+// const mergeObj = merge({name: "Max"}, {age: 30})
+// mergeObj.age
