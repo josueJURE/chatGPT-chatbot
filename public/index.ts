@@ -13,8 +13,11 @@ const userId = Math.random().toString(36).substring(7);
 interface ChatgptData {
     text: string;
     role: string;
-
+    id: string
+  
 }
+
+
 
 
 
@@ -26,6 +29,7 @@ interface ResponseData {
           value: string;
         };
       }>;
+      id: string
     }>;
   }
   
@@ -51,7 +55,10 @@ btn.addEventListener("click", () => {
                 const elementData: ChatgptData = {
                     text: data.message[i].content[0].text.value,
                     role: data.message[i].role,
+                    id: data.message[i].id
+        
                 }
+                console.log({elementData: elementData})
                 buildElement(elementData);
                 console.log(data.message[i].role)
             }
@@ -99,12 +106,11 @@ function emptyElement(element: HTMLInputElement) : void  {
 // 6/09/24
 // turn empyElement() into a generic  function
 // try to use generics in ResponseData see Quiz: "Object Type With Holes" in EP
-// write a function instead of (() => { throw new Error('Something has gone wrong!'); })();
 // EXP TS
 // EXP JS Everyday TypeScript: The Object Type + Udemy lesson 96
 // EXP redo JS JavaScript Concurrency: Promises Are Asynchronous: We've now seen the core idea in promises: they schedule code to run later, and we can add callback functions that will run after a promise fulfills. This shows us why promises are called promises: when we create one, we're promising to provide a value at some point in the future.
 // EXP, TS: Exhaustiveness Checking redo it
-// function buildElement() pas an interface as an argument
+
 
 
 // const names: Array<string | number> = []
