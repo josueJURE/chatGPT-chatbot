@@ -6,6 +6,7 @@ const mainContainer = document.querySelector(".main-container");
 console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
+const processedIds = new Set();
 btn.addEventListener("click", () => {
     fetch("/", {
         method: "POST",
@@ -24,17 +25,19 @@ btn.addEventListener("click", () => {
         if (data.message) {
             console.log(data.message);
             for (let i = 0; i < data.message.length; i++) {
-                let text = data.message[i].content[0].text.value;
-                let role = data.message[i].role;
                 let id = data.message[i].id;
-                let emptyObj = {};
-                if (!Object.values(emptyObj).includes(id)) {
-                    emptyObj.text = text;
-                    emptyObj.role = role,
-                        emptyObj.id = id;
+                if (!processedIds.has(id)) {
+                    let text = data.message[i].content[0].text.value;
+                    let role = data.message[i].role;
+                    let emptyObj = {
+                        text: text,
+                        role: role,
+                        id: id
+                    };
                     buildElement(emptyObj);
+                    processedIds.add(id);
+                    console.log({ elementData: emptyObj.id });
                 }
-                console.log({ elementData: emptyObj.id });
                 // buildElement(emptyObj);
                 console.log(data.message[i].role);
             }

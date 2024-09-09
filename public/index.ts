@@ -23,6 +23,8 @@ interface ChatgptData {
     id?: string;
   }
   
+
+  const processedIds = new Set<string>()
  
 
 
@@ -60,19 +62,31 @@ btn.addEventListener("click", () => {
         if (data.message) {
             console.log(data.message)
             for(let i = 0; i < data.message.length; i++) {
-                let text: string = data.message[i].content[0].text.value;
-                let role: string =  data.message[i].role;
+             
                 let id: string = data.message[i].id;
-               
-                let emptyObj: ChatgptData = {};
-                if(!Object.values(emptyObj).includes(id)) {
-                    emptyObj.text = text
-                    emptyObj.role = role,
-                    emptyObj.id = id
+
+                if(!processedIds.has(id)) {
+                    let text: string = data.message[i].content[0].text.value;
+                    let role: string =  data.message[i].role;
+
+                    let emptyObj: ChatgptData = {
+                        text: text,
+                        role: role,
+                        id: id
+                    };
+
                     buildElement(emptyObj);
+
+                    processedIds.add(id)
+
+                    console.log({elementData: emptyObj.id})
+                 
+
                 }
+               
+              
            
-                console.log({elementData: emptyObj.id})
+               
                 // buildElement(emptyObj);
                 console.log(data.message[i].role)
             }
@@ -84,10 +98,9 @@ btn.addEventListener("click", () => {
 
 })
 
-function buildElement(props: ChatgptData) : void { /// could the argument I've passed in be an interface
+function buildElement(props: ChatgptData) : void { 
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
-   
         let newContent = document.createTextNode(props.text ?? " ");
         newDiv.appendChild(newContent);
         console.log(newContent);
