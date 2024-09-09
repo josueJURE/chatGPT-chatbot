@@ -10,12 +10,6 @@ const userId = Math.random().toString(36).substring(7);
 
 
 
-// interface ChatgptData {
-//     text: string | null;
-//     role: string | null; 
-//     id: string | null
-  
-// }
 
 interface ChatgptData {
     text?: string;
@@ -69,17 +63,17 @@ btn.addEventListener("click", () => {
                     let text: string = data.message[i].content[0].text.value;
                     let role: string =  data.message[i].role;
 
-                    let emptyObj: ChatgptData = {
+                    let  messageObj: ChatgptData = {
                         text: text,
                         role: role,
                         id: id
                     };
 
-                    buildElement(emptyObj);
+                    buildElement( messageObj);
 
                     processedIds.add(id)
 
-                    console.log({elementData: emptyObj.id})
+                    console.log({elementData:  messageObj.id})
                  
 
                 }
