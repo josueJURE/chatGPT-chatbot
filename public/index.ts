@@ -10,12 +10,20 @@ const userId = Math.random().toString(36).substring(7);
 
 
 
-interface ChatgptData {
-    text: string;
-    role: string;
-    id: string
+// interface ChatgptData {
+//     text: string | null;
+//     role: string | null; 
+//     id: string | null
   
-}
+// }
+
+interface ChatgptData {
+    text?: string;
+    role?: string;
+    id?: string;
+  }
+  
+ 
 
 
 
@@ -40,7 +48,7 @@ btn.addEventListener("click", () => {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ // convert  into JSON to send it to an API
             input: userInput.value,
             userId: userId  // Send the user ID with each request
         })
@@ -50,16 +58,22 @@ btn.addEventListener("click", () => {
     })
     .then((data: ResponseData) => {
         if (data.message) {
-            console.log(data)
+            console.log(data.message)
             for(let i = 0; i < data.message.length; i++) {
-                const elementData: ChatgptData = {
-                    text: data.message[i].content[0].text.value,
-                    role: data.message[i].role,
-                    id: data.message[i].id
-        
+                let text: string = data.message[i].content[0].text.value;
+                let role: string =  data.message[i].role;
+                let id: string = data.message[i].id;
+               
+                let emptyObj: ChatgptData = {};
+                if(!Object.values(emptyObj).includes(id)) {
+                    emptyObj.text = text
+                    emptyObj.role = role,
+                    emptyObj.id = id
+                    buildElement(emptyObj);
                 }
-                console.log({elementData: elementData})
-                buildElement(elementData);
+           
+                console.log({elementData: emptyObj.id})
+                // buildElement(emptyObj);
                 console.log(data.message[i].role)
             }
            
@@ -73,11 +87,16 @@ btn.addEventListener("click", () => {
 function buildElement(props: ChatgptData) : void { /// could the argument I've passed in be an interface
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode(props.text);
-    newDiv.appendChild(newContent);
-    console.log(newContent);
+   
+        let newContent = document.createTextNode(props.text ?? " ");
+        newDiv.appendChild(newContent);
+        console.log(newContent);
+    
     responseElement.appendChild(newDiv);
-    props.role === "assistant" ? newDiv.classList.add("userNewDiv") :  newDiv.classList.add("assistantNewDiv");
+    if(props.role) {
+        props.role === "assistant" ? newDiv.classList.add("userNewDiv") :  newDiv.classList.add("assistantNewDiv");
+    }
+    
 }
 
 function throwError() {
@@ -89,6 +108,13 @@ function emptyElement(element: HTMLInputElement) : void  {
     element.value = ""
 
 }
+
+
+// 8/09/24
+// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// why Object.values(emptyObj).includes(id) didn't work
+// EXP  type guard  & coallescing null
+
 
 
 

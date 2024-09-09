@@ -22,15 +22,20 @@ btn.addEventListener("click", () => {
     })
         .then((data) => {
         if (data.message) {
-            console.log(data);
+            console.log(data.message);
             for (let i = 0; i < data.message.length; i++) {
-                const elementData = {
-                    text: data.message[i].content[0].text.value,
-                    role: data.message[i].role,
-                    id: data.message[i].id
-                };
-                console.log({ elementData: elementData });
-                buildElement(elementData);
+                let text = data.message[i].content[0].text.value;
+                let role = data.message[i].role;
+                let id = data.message[i].id;
+                let emptyObj = {};
+                if (!Object.values(emptyObj).includes(id)) {
+                    emptyObj.text = text;
+                    emptyObj.role = role,
+                        emptyObj.id = id;
+                    buildElement(emptyObj);
+                }
+                console.log({ elementData: emptyObj.id });
+                // buildElement(emptyObj);
                 console.log(data.message[i].role);
             }
         }
@@ -38,13 +43,16 @@ btn.addEventListener("click", () => {
     emptyElement(userInput);
 });
 function buildElement(props) {
+    var _a;
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode(props.text);
+    let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
-    props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+    if (props.role) {
+        props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+    }
 }
 function throwError() {
     throw new Error("something has gone wrong");
@@ -52,6 +60,10 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
+// 8/09/24
+// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// why Object.values(emptyObj).includes(id) didn't work
+// EXP  type guard  & coallescing null
 // 1  why empyElement() not working:                            DONE
 // 2 create a function for block of code within the for loop:   DONE
 // 3 get rid of any types:                                      DONE
