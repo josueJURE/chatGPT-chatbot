@@ -6,6 +6,8 @@ const mainContainer = document.querySelector(".main-container");
 console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
+const processedIds = new Set();
+const arrayIDs = [];
 btn.addEventListener("click", () => {
     fetch("/", {
         method: "POST",
@@ -22,13 +24,33 @@ btn.addEventListener("click", () => {
     })
         .then((data) => {
         if (data.message) {
-            console.log(data);
+            console.log(data.message);
             for (let i = 0; i < data.message.length; i++) {
-                const elementData = {
-                    text: data.message[i].content[0].text.value,
-                    role: data.message[i].role,
-                };
-                buildElement(elementData);
+                let id = data.message[i].id;
+                if (!arrayIDs.includes(id)) {
+                    let text = data.message[i].content[0].text.value;
+                    let role = data.message[i].role;
+                    let messageObj = {
+                        text: text,
+                        role: role,
+                        id: id
+                    };
+                    buildElement(messageObj);
+                    arrayIDs.push(id);
+                }
+                // if(!processedIds.has(id)) {
+                //     let text: string = data.message[i].content[0].text.value;
+                //     let role: string =  data.message[i].role;
+                //     let  messageObj: ChatgptData = {
+                //         text: text,
+                //         role: role,
+                //         id: id
+                //     };
+                //     buildElement( messageObj);
+                //     processedIds.add(id)
+                //     console.log({elementData:  messageObj.id})
+                // }
+                // buildElement(emptyObj);
                 console.log(data.message[i].role);
             }
         }
@@ -36,13 +58,16 @@ btn.addEventListener("click", () => {
     emptyElement(userInput);
 });
 function buildElement(props) {
+    var _a;
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode(props.text);
+    let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
-    props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+    if (props.role) {
+        props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+    }
 }
 function throwError() {
     throw new Error("something has gone wrong");
@@ -50,6 +75,10 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
+// 8/09/24
+// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// why Object.values(emptyObj).includes(id) didn't work
+// EXP  type guard  & coallescing null
 // 1  why empyElement() not working:                            DONE
 // 2 create a function for block of code within the for loop:   DONE
 // 3 get rid of any types:                                      DONE
@@ -60,12 +89,10 @@ function emptyElement(element) {
 // 6/09/24
 // turn empyElement() into a generic  function
 // try to use generics in ResponseData see Quiz: "Object Type With Holes" in EP
-// write a function instead of (() => { throw new Error('Something has gone wrong!'); })();
 // EXP TS
 // EXP JS Everyday TypeScript: The Object Type + Udemy lesson 96
 // EXP redo JS JavaScript Concurrency: Promises Are Asynchronous: We've now seen the core idea in promises: they schedule code to run later, and we can add callback functions that will run after a promise fulfills. This shows us why promises are called promises: when we create one, we're promising to provide a value at some point in the future.
 // EXP, TS: Exhaustiveness Checking redo it
-// function buildElement() pas an interface as an argument
 // const names: Array<string | number> = []
 // function merge<T, U>(objA: T, objB: U) {
 //     return Object.assign(objA, objB);
