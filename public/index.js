@@ -7,6 +7,7 @@ console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();
+const arrayIDs = [];
 btn.addEventListener("click", () => {
     fetch("/", {
         method: "POST",
@@ -26,18 +27,29 @@ btn.addEventListener("click", () => {
             console.log(data.message);
             for (let i = 0; i < data.message.length; i++) {
                 let id = data.message[i].id;
-                if (!processedIds.has(id)) {
+                if (!arrayIDs.includes(id)) {
                     let text = data.message[i].content[0].text.value;
                     let role = data.message[i].role;
-                    let emptyObj = {
+                    let messageObj = {
                         text: text,
                         role: role,
                         id: id
                     };
-                    buildElement(emptyObj);
-                    processedIds.add(id);
-                    console.log({ elementData: emptyObj.id });
+                    buildElement(messageObj);
+                    arrayIDs.push(id);
                 }
+                // if(!processedIds.has(id)) {
+                //     let text: string = data.message[i].content[0].text.value;
+                //     let role: string =  data.message[i].role;
+                //     let  messageObj: ChatgptData = {
+                //         text: text,
+                //         role: role,
+                //         id: id
+                //     };
+                //     buildElement( messageObj);
+                //     processedIds.add(id)
+                //     console.log({elementData:  messageObj.id})
+                // }
                 // buildElement(emptyObj);
                 console.log(data.message[i].role);
             }

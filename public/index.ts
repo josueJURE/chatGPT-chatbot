@@ -19,6 +19,8 @@ interface ChatgptData {
   
 
   const processedIds = new Set<string>()
+
+  const arrayIDs: string[] = []
  
 
 
@@ -59,7 +61,8 @@ btn.addEventListener("click", () => {
              
                 let id: string = data.message[i].id;
 
-                if(!processedIds.has(id)) {
+
+                if(!arrayIDs.includes(id)) {
                     let text: string = data.message[i].content[0].text.value;
                     let role: string =  data.message[i].role;
 
@@ -69,14 +72,30 @@ btn.addEventListener("click", () => {
                         id: id
                     };
 
-                    buildElement( messageObj);
+                    buildElement(messageObj);
 
-                    processedIds.add(id)
-
-                    console.log({elementData:  messageObj.id})
-                 
+                    arrayIDs.push(id);
 
                 }
+
+                // if(!processedIds.has(id)) {
+                //     let text: string = data.message[i].content[0].text.value;
+                //     let role: string =  data.message[i].role;
+
+                //     let  messageObj: ChatgptData = {
+                //         text: text,
+                //         role: role,
+                //         id: id
+                //     };
+
+                //     buildElement( messageObj);
+
+                //     processedIds.add(id)
+
+                //     console.log({elementData:  messageObj.id})
+                 
+
+                // }
                
               
            
@@ -118,9 +137,11 @@ function emptyElement(element: HTMLInputElement) : void  {
 
 
 // 8/09/24
-// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
+// find a way for question written by user to be displayed right away
+//  ChatgptData can ? be removed
 
 
 
