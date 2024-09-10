@@ -33,7 +33,7 @@ interface ResponseData {
 
 btn.addEventListener("click", () => {
  
-    userElement()
+    createUserElement()
 
      
   fetch("/", {
@@ -103,7 +103,7 @@ btn.addEventListener("click", () => {
 });
 
 
-function userElement() : void {
+function createUserElement() : void {
     let newDiv = document.createElement("div");
     newDiv.classList.add("newDiv");
     let newContent = document.createTextNode(userInput.value ?? " ");
