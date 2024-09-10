@@ -9,18 +9,24 @@ const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();
 const arrayIDs = [];
 btn.addEventListener("click", () => {
+    userElement();
     fetch("/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
+            // convert  into JSON to send it to an API
             input: userInput.value,
-            userId: userId // Send the user ID with each request
-        })
+            userId: userId, // Send the user ID with each request
+        }),
     })
         .then((response) => {
-        return response.status === 200 && response.ok ? response.json() : (() => { throw new Error('Something has gone wrong!'); })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
+        return response.status === 200 && response.ok
+            ? response.json()
+            : (() => {
+                throw new Error("Something has gone wrong!");
+            })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
     })
         .then((data) => {
         if (data.message) {
@@ -33,7 +39,7 @@ btn.addEventListener("click", () => {
                     let messageObj = {
                         text: text,
                         role: role,
-                        id: id
+                        id: id,
                     };
                     buildElement(messageObj);
                     arrayIDs.push(id);
@@ -57,6 +63,15 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
+function userElement() {
+    var _a;
+    let newDiv = document.createElement("div");
+    newDiv.classList.add("newDiv");
+    let newContent = document.createTextNode((_a = userInput.value) !== null && _a !== void 0 ? _a : " ");
+    newDiv.appendChild(newContent);
+    responseElement.appendChild(newDiv);
+    newDiv.classList.add("assistantNewDiv");
+}
 function buildElement(props) {
     var _a;
     let newDiv = document.createElement("div");
@@ -66,9 +81,19 @@ function buildElement(props) {
     console.log(newContent);
     responseElement.appendChild(newDiv);
     if (props.role) {
-        props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+        props.role === "assistant"
+            ? newDiv.classList.add("userNewDiv")
+            : newDiv.classList.add("assistantNewDiv");
     }
 }
+// function userElement() : void {
+//     let newDiv = document.createElement("div");
+//     newDiv.classList.add("newDiv");
+//     let newContent = document.createTextNode(userInput.value ?? " ");
+//     newDiv.appendChild(newContent);
+//     responseElement.appendChild(newDiv)
+//     newDiv.classList.add("assistantNewDiv");
+// }
 function throwError() {
     throw new Error("something has gone wrong");
 }
@@ -76,9 +101,11 @@ function emptyElement(element) {
     element.value = "";
 }
 // 8/09/24
-// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
+// find a way for question written by user to be displayed right away
+//  ChatgptData can ? be removed
 // 1  why empyElement() not working:                            DONE
 // 2 create a function for block of code within the for loop:   DONE
 // 3 get rid of any types:                                      DONE

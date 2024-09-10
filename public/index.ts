@@ -32,6 +32,10 @@ interface ResponseData {
 }
 
 btn.addEventListener("click", () => {
+ 
+    userElement()
+
+     
   fetch("/", {
     method: "POST",
     headers: {
@@ -98,6 +102,16 @@ btn.addEventListener("click", () => {
   emptyElement(userInput);
 });
 
+
+function userElement() : void {
+    let newDiv = document.createElement("div");
+    newDiv.classList.add("newDiv");
+    let newContent = document.createTextNode(userInput.value ?? " ");
+    newDiv.appendChild(newContent);
+    responseElement.appendChild(newDiv)
+    newDiv.classList.add("assistantNewDiv");
+}
+
 function buildElement(props: ChatgptData): void {
   let newDiv = document.createElement("div");
   newDiv.classList.add("newDiv");
@@ -112,6 +126,15 @@ function buildElement(props: ChatgptData): void {
       : newDiv.classList.add("assistantNewDiv");
   }
 }
+
+// function userElement() : void {
+//     let newDiv = document.createElement("div");
+//     newDiv.classList.add("newDiv");
+//     let newContent = document.createTextNode(userInput.value ?? " ");
+//     newDiv.appendChild(newContent);
+//     responseElement.appendChild(newDiv)
+//     newDiv.classList.add("assistantNewDiv");
+// }
 
 function throwError() {
   throw new Error("something has gone wrong");
