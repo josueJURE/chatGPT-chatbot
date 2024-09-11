@@ -32,8 +32,12 @@ interface ResponseData {
 }
 
 btn.addEventListener("click", () => {
+
+  if(userInput.value === "") {
+    alert("enter your question please")
+  }
  
-    createUserElement()
+    createUserElement(userInput.value)
 
      
   fetch("/", {
@@ -72,6 +76,8 @@ btn.addEventListener("click", () => {
 
             buildElement(messageObj);
 
+            console.log(messageObj)
+
             arrayIDs.push(id);
           }
 
@@ -103,13 +109,14 @@ btn.addEventListener("click", () => {
 });
 
 
-function createUserElement() : void {
-    let newDiv = document.createElement("div");
-    newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode(userInput.value ?? " ");
-    newDiv.appendChild(newContent);
-    responseElement.appendChild(newDiv)
-    newDiv.classList.add("assistantNewDiv");
+function createUserElement(element: string) : void {
+    let newElement = document.createElement("div");
+    newElement.classList.add("newDiv");
+    let newContent = document.createTextNode(element ?? " ");
+    newElement.appendChild(newContent);
+    responseElement.appendChild(newElement)
+    // newDiv.classList.add("userNewDiv");
+    newElement.classList.add("assistantNewDiv");
 }
 
 function buildElement(props: ChatgptData): void {
@@ -120,10 +127,9 @@ function buildElement(props: ChatgptData): void {
   console.log(newContent);
 
   responseElement.appendChild(newDiv);
-  if (props.role) {
-    props.role === "assistant"
-      ? newDiv.classList.add("userNewDiv")
-      : newDiv.classList.add("assistantNewDiv");
+  if (props.role && props.role === "assistant") {
+      // newDiv.classList.add("assistantNewDiv");
+      newDiv.classList.add("userNewDiv");
   }
 }
 
@@ -144,11 +150,15 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 8/09/24
+// 10/09/24
+// get only one user element to be displayed
+// store  userInput.value into a variable
+// merge createUserElement() and buildElement() into one
+// generating effect
+// notebook 68, object value at run time, tyoe widening. 
 // claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
-// find a way for question written by user to be displayed right away
 //  ChatgptData can ? be removed
 
 // 1  why empyElement() not working:                            DONE

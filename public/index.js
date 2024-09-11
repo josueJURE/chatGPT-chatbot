@@ -9,7 +9,10 @@ const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();
 const arrayIDs = [];
 btn.addEventListener("click", () => {
-    userElement();
+    if (userInput.value === "") {
+        alert("enter your question please");
+    }
+    createUserElement(userInput.value);
     fetch("/", {
         method: "POST",
         headers: {
@@ -42,6 +45,7 @@ btn.addEventListener("click", () => {
                         id: id,
                     };
                     buildElement(messageObj);
+                    console.log(messageObj);
                     arrayIDs.push(id);
                 }
                 // if(!processedIds.has(id)) {
@@ -63,14 +67,14 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
-function userElement() {
-    var _a;
-    let newDiv = document.createElement("div");
-    newDiv.classList.add("newDiv");
-    let newContent = document.createTextNode((_a = userInput.value) !== null && _a !== void 0 ? _a : " ");
-    newDiv.appendChild(newContent);
-    responseElement.appendChild(newDiv);
-    newDiv.classList.add("assistantNewDiv");
+function createUserElement(element) {
+    let newElement = document.createElement("div");
+    newElement.classList.add("newDiv");
+    let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
+    newElement.appendChild(newContent);
+    responseElement.appendChild(newElement);
+    // newDiv.classList.add("userNewDiv");
+    newElement.classList.add("assistantNewDiv");
 }
 function buildElement(props) {
     var _a;
@@ -80,10 +84,9 @@ function buildElement(props) {
     newDiv.appendChild(newContent);
     console.log(newContent);
     responseElement.appendChild(newDiv);
-    if (props.role) {
-        props.role === "assistant"
-            ? newDiv.classList.add("userNewDiv")
-            : newDiv.classList.add("assistantNewDiv");
+    if (props.role && props.role === "assistant") {
+        // newDiv.classList.add("assistantNewDiv");
+        newDiv.classList.add("userNewDiv");
     }
 }
 // function userElement() : void {
@@ -100,11 +103,15 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 8/09/24
+// 10/09/24
+// get only one user element to be displayed
+// store  userInput.value into a variable
+// merge createUserElement() and buildElement() into one
+// generating effect
+// notebook 68, object value at run time, tyoe widening. 
 // claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
-// find a way for question written by user to be displayed right away
 //  ChatgptData can ? be removed
 // 1  why empyElement() not working:                            DONE
 // 2 create a function for block of code within the for loop:   DONE
