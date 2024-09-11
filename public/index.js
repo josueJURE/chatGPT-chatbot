@@ -44,7 +44,7 @@ btn.addEventListener("click", () => {
                         role: role,
                         id: id,
                     };
-                    buildElement(messageObj);
+                    createAssistElement(messageObj);
                     console.log(messageObj);
                     arrayIDs.push(id);
                 }
@@ -69,24 +69,22 @@ btn.addEventListener("click", () => {
 });
 function createUserElement(element) {
     let newElement = document.createElement("div");
-    newElement.classList.add("newDiv");
+    newElement.classList.add("userNewDiv");
     let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
     newElement.appendChild(newContent);
     responseElement.appendChild(newElement);
     // newDiv.classList.add("userNewDiv");
-    newElement.classList.add("assistantNewDiv");
+    newElement.classList.add("userNewDiv");
 }
-function buildElement(props) {
+function createAssistElement(props) {
     var _a;
     let newDiv = document.createElement("div");
-    newDiv.classList.add("newDiv");
+    newDiv.classList.add("assistantNewDiv");
     let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
     newDiv.appendChild(newContent);
     console.log(newContent);
-    responseElement.appendChild(newDiv);
     if (props.role && props.role === "assistant") {
-        // newDiv.classList.add("assistantNewDiv");
-        newDiv.classList.add("userNewDiv");
+        responseElement.appendChild(newDiv);
     }
 }
 // function userElement() : void {

@@ -34,7 +34,6 @@ interface ResponseData {
 btn.addEventListener("click", () => {
 
   if(userInput.value === "") {
-  
     return alert("enter your question please") 
   }
  
@@ -75,7 +74,7 @@ btn.addEventListener("click", () => {
               id: id,
             };
 
-            buildElement(messageObj);
+            createAssistElement(messageObj);
 
             console.log(messageObj)
 
@@ -112,25 +111,24 @@ btn.addEventListener("click", () => {
 
 function createUserElement(element: string) : void {
     let newElement = document.createElement("div");
-    newElement.classList.add("newDiv");
+    newElement.classList.add("userNewDiv");
     let newContent = document.createTextNode(element ?? " ");
     newElement.appendChild(newContent);
     responseElement.appendChild(newElement)
     // newDiv.classList.add("userNewDiv");
-    newElement.classList.add("assistantNewDiv");
+    newElement.classList.add("userNewDiv");
 }
 
-function buildElement(props: ChatgptData): void {
+function createAssistElement(props: ChatgptData): void {
   let newDiv = document.createElement("div");
-  newDiv.classList.add("newDiv");
+  newDiv.classList.add("assistantNewDiv");
   let newContent = document.createTextNode(props.text ?? " ");
   newDiv.appendChild(newContent);
   console.log(newContent);
 
-  responseElement.appendChild(newDiv);
+  
   if (props.role && props.role === "assistant") {
-      // newDiv.classList.add("assistantNewDiv");
-      newDiv.classList.add("userNewDiv");
+      responseElement.appendChild(newDiv);
   }
 }
 
