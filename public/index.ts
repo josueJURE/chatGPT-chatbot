@@ -8,6 +8,7 @@ console.log(userInput, responseElement, btn);
 
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
+const userInputValue = userInput.value
 
 interface ChatgptData {
   text?: string;
@@ -47,7 +48,7 @@ btn.addEventListener("click", () => {
     },
     body: JSON.stringify({
       // convert  into JSON to send it to an API
-      input: userInput.value,
+      input: userInputValue,
       userId: userId, // Send the user ID with each request
     }),
   })
@@ -150,7 +151,6 @@ function emptyElement(element: HTMLInputElement): void {
 }
 
 // 10/09/24
-// get only one user element to be displayed
 // store  userInput.value into a variable
 // merge createUserElement() and buildElement() into one
 // generating effect
