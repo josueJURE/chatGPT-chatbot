@@ -34,7 +34,8 @@ interface ResponseData {
 btn.addEventListener("click", () => {
 
   if(userInput.value === "") {
-    alert("enter your question please")
+  
+    return alert("enter your question please") 
   }
  
     createUserElement(userInput.value)
