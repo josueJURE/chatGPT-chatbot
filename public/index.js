@@ -10,6 +10,7 @@ const userInputValue = userInput.value;
 const processedIds = new Set();
 const arrayIDs = [];
 btn.addEventListener("click", () => {
+    console.log(userInputValue);
     if (userInput.value === "") {
         return alert("enter your question please");
     }
@@ -21,7 +22,7 @@ btn.addEventListener("click", () => {
         },
         body: JSON.stringify({
             // convert  into JSON to send it to an API
-            input: userInputValue,
+            input: userInput.value,
             userId: userId, // Send the user ID with each request
         }),
     })
@@ -38,7 +39,7 @@ btn.addEventListener("click", () => {
             for (let i = 0; i < data.message.length; i++) {
                 let id = data.message[i].id;
                 if (!arrayIDs.includes(id)) {
-                    let text = data.message[i].content[0].text.value;
+                    let text = data.message[i].content[0].text.value.trim();
                     let role = data.message[i].role;
                     let messageObj = {
                         text: text,
@@ -74,8 +75,6 @@ function createUserElement(element) {
     let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
     newElement.appendChild(newContent);
     responseElement.appendChild(newElement);
-    // newDiv.classList.add("userNewDiv");
-    newElement.classList.add("userNewDiv");
 }
 function createAssistElement(props) {
     var _a;
@@ -83,7 +82,6 @@ function createAssistElement(props) {
     newDiv.classList.add("assistantNewDiv");
     let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
     newDiv.appendChild(newContent);
-    console.log(newContent);
     if (props.role && props.role === "assistant") {
         responseElement.appendChild(newDiv);
     }
@@ -102,8 +100,8 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 10/09/24
-// store  userInput.value into a variable
+// 13/09/24
+// why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
 // merge createUserElement() and buildElement() into one
 // generating effect
 // notebook 68, object value at run time, tyoe widening. 

@@ -34,7 +34,9 @@ interface ResponseData {
 
 btn.addEventListener("click", () => {
 
-  if(userInput.value === "") {
+  console.log(userInputValue)
+
+  if( userInput.value  === "") {
     return alert("enter your question please") 
   }
  
@@ -48,7 +50,7 @@ btn.addEventListener("click", () => {
     },
     body: JSON.stringify({
       // convert  into JSON to send it to an API
-      input: userInputValue,
+      input: userInput.value,
       userId: userId, // Send the user ID with each request
     }),
   })
@@ -66,7 +68,7 @@ btn.addEventListener("click", () => {
           let id: string = data.message[i].id;
 
           if (!arrayIDs.includes(id)) {
-            let text: string = data.message[i].content[0].text.value;
+            let text: string = data.message[i].content[0].text.value.trim();
             let role: string = data.message[i].role;
 
             let messageObj: ChatgptData = {
@@ -110,14 +112,16 @@ btn.addEventListener("click", () => {
 });
 
 
+
+
+
 function createUserElement(element: string) : void {
     let newElement = document.createElement("div");
     newElement.classList.add("userNewDiv");
     let newContent = document.createTextNode(element ?? " ");
     newElement.appendChild(newContent);
     responseElement.appendChild(newElement)
-    // newDiv.classList.add("userNewDiv");
-    newElement.classList.add("userNewDiv");
+
 }
 
 function createAssistElement(props: ChatgptData): void {
@@ -125,7 +129,7 @@ function createAssistElement(props: ChatgptData): void {
   newDiv.classList.add("assistantNewDiv");
   let newContent = document.createTextNode(props.text ?? " ");
   newDiv.appendChild(newContent);
-  console.log(newContent);
+
 
   
   if (props.role && props.role === "assistant") {
@@ -150,8 +154,8 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 10/09/24
-// store  userInput.value into a variable
+// 13/09/24
+// why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
 // merge createUserElement() and buildElement() into one
 // generating effect
 // notebook 68, object value at run time, tyoe widening. 
