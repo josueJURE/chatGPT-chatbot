@@ -115,6 +115,9 @@ btn.addEventListener("click", () => {
 
 
 
+
+
+
 function createUserElement(element: string) : void {
     let newElement = document.createElement("div");
     newElement.classList.add("userNewDiv");
@@ -155,7 +158,10 @@ function emptyElement(element: HTMLInputElement): void {
 }
 
 // 13/09/24
+// Claude: Refactoring User and Assistant Elements in TypeScript
 // why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
+// Never Every TS:   throw new Error("Something has gone wrong!");
+// EXP: never, finish writing notes
 // merge createUserElement() and buildElement() into one
 // generating effect
 // notebook 68, object value at run time, tyoe widening. 
