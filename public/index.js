@@ -7,6 +7,20 @@ console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const userInputValue = userInput.value;
+function experimentalFunction(data) {
+    let newDiv = document.createElement("div");
+    newDiv.classList.add(data.role === "user" ? "userNewDiv" : "assistantNewDiv");
+    // let newContent = document.createTextNode(data.text || "");
+    newDiv.textContent = data.text || "";
+    if (responseElement) {
+        responseElement.appendChild(newDiv);
+    }
+    else {
+        console.error("Response element not found");
+    }
+    // newDiv.appendChild(newContent);
+    // responseElement.appendChild(newContent);
+}
 const processedIds = new Set();
 const arrayIDs = [];
 btn.addEventListener("click", () => {
@@ -14,7 +28,8 @@ btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    createUserElement(userInput.value);
+    // createUserElement(userInput.value);
+    experimentalFunction({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
         headers: {
@@ -41,13 +56,14 @@ btn.addEventListener("click", () => {
                 if (!arrayIDs.includes(id)) {
                     let text = data.message[i].content[0].text.value.trim();
                     let role = data.message[i].role;
-                    let messageObj = {
-                        text: text,
-                        role: role,
-                        id: id,
-                    };
-                    createAssistElement(messageObj);
-                    console.log(messageObj);
+                    // let messageObj: ChatgptData = {
+                    //   text: text,
+                    //   role: role,
+                    //   id: id,
+                    // };
+                    experimentalFunction({ text: text, role: role, id: id });
+                    // createAssistElement(messageObj);
+                    // console.log(messageObj)
                     arrayIDs.push(id);
                 }
                 // if(!processedIds.has(id)) {
@@ -69,23 +85,22 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
-function createUserElement(element) {
-    let newElement = document.createElement("div");
-    newElement.classList.add("userNewDiv");
-    let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
-    newElement.appendChild(newContent);
-    responseElement.appendChild(newElement);
-}
-function createAssistElement(props) {
-    var _a;
-    let newDiv = document.createElement("div");
-    newDiv.classList.add("assistantNewDiv");
-    let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
-    newDiv.appendChild(newContent);
-    if (props.role && props.role === "assistant") {
-        responseElement.appendChild(newDiv);
-    }
-}
+// function createUserElement(element: string) : void {
+//     let newElement = document.createElement("div");
+//     newElement.classList.add("userNewDiv");
+//     let newContent = document.createTextNode(element ?? " ");
+//     newElement.appendChild(newContent);
+//     responseElement.appendChild(newElement)
+// }
+// function createAssistElement(props: ChatgptData): void {
+//   let newDiv = document.createElement("div");
+//   newDiv.classList.add("assistantNewDiv");
+//   let newContent = document.createTextNode(props.text ?? " ");
+//   newDiv.appendChild(newContent);
+//   if (props.role && props.role === "assistant") {
+//       responseElement.appendChild(newDiv);
+//   }
+// }
 // function userElement() : void {
 //     let newDiv = document.createElement("div");
 //     newDiv.classList.add("newDiv");

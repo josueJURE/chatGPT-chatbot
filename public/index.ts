@@ -1,19 +1,31 @@
 const userInput = document.querySelector(".userInput") as HTMLInputElement;
-const responseElement = document.querySelector(
-  ".responseElement"
-) as HTMLElement;
+const responseElement = document.querySelector( ".responseElement") as HTMLElement;
 const btn = document.querySelector(".btn") as HTMLButtonElement;
 const mainContainer = document.querySelector(".main-container") as HTMLElement;
-console.log(userInput, responseElement, btn);
+
 
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const userInputValue = userInput.value
 
 interface ChatgptData {
-  text?: string;
-  role?: string;
+  text: string;
+  role: "user" | "assistant";
   id?: string;
+}
+
+function experimentalFunction(data: ChatgptData) : void{
+  let newDiv = document.createElement("div");
+  newDiv.classList.add(data.role === "user" ? "userNewDiv" : "assistantNewDiv");
+  // let newContent = document.createTextNode(data.text || "");
+  newDiv.textContent = data.text || "";
+  if(responseElement) {
+    responseElement.appendChild(newDiv);
+  } else {
+    console.error("Response element not found");
+  }
+  // newDiv.appendChild(newContent);
+  // responseElement.appendChild(newContent);
 }
 
 const processedIds = new Set<string>();
@@ -34,13 +46,14 @@ interface ResponseData {
 
 btn.addEventListener("click", () => {
 
-  console.log(userInputValue)
+ 
 
   if( userInput.value  === "") {
     return alert("enter your question please") 
   }
  
-    createUserElement(userInput.value)
+    // createUserElement(userInput.value);
+    experimentalFunction({text: userInput.value, role: "user"});
 
      
   fetch("/", {
@@ -71,15 +84,18 @@ btn.addEventListener("click", () => {
             let text: string = data.message[i].content[0].text.value.trim();
             let role: string = data.message[i].role;
 
-            let messageObj: ChatgptData = {
-              text: text,
-              role: role,
-              id: id,
-            };
+            // let messageObj: ChatgptData = {
+            //   text: text,
+            //   role: role,
+            //   id: id,
+            // };
 
-            createAssistElement(messageObj);
+            experimentalFunction({ text: text, role: role as 'user' | 'assistant', id: id });
 
-            console.log(messageObj)
+            
+            // createAssistElement(messageObj);
+
+            // console.log(messageObj)
 
             arrayIDs.push(id);
           }
@@ -118,27 +134,27 @@ btn.addEventListener("click", () => {
 
 
 
-function createUserElement(element: string) : void {
-    let newElement = document.createElement("div");
-    newElement.classList.add("userNewDiv");
-    let newContent = document.createTextNode(element ?? " ");
-    newElement.appendChild(newContent);
-    responseElement.appendChild(newElement)
+// function createUserElement(element: string) : void {
+//     let newElement = document.createElement("div");
+//     newElement.classList.add("userNewDiv");
+//     let newContent = document.createTextNode(element ?? " ");
+//     newElement.appendChild(newContent);
+//     responseElement.appendChild(newElement)
 
-}
+// }
 
-function createAssistElement(props: ChatgptData): void {
-  let newDiv = document.createElement("div");
-  newDiv.classList.add("assistantNewDiv");
-  let newContent = document.createTextNode(props.text ?? " ");
-  newDiv.appendChild(newContent);
+// function createAssistElement(props: ChatgptData): void {
+//   let newDiv = document.createElement("div");
+//   newDiv.classList.add("assistantNewDiv");
+//   let newContent = document.createTextNode(props.text ?? " ");
+//   newDiv.appendChild(newContent);
 
 
   
-  if (props.role && props.role === "assistant") {
-      responseElement.appendChild(newDiv);
-  }
-}
+//   if (props.role && props.role === "assistant") {
+//       responseElement.appendChild(newDiv);
+//   }
+// }
 
 // function userElement() : void {
 //     let newDiv = document.createElement("div");
