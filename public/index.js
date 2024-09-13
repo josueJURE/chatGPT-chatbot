@@ -3,33 +3,51 @@ const userInput = document.querySelector(".userInput");
 const responseElement = document.querySelector(".responseElement");
 const btn = document.querySelector(".btn");
 const mainContainer = document.querySelector(".main-container");
-console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const userInputValue = userInput.value;
+const processedIds = new Set();
+let count = 0;
+const arrayIDs = [];
 function experimentalFunction(data) {
-    let newDiv = document.createElement("div");
-    newDiv.classList.add(data.role === "user" ? "userNewDiv" : "assistantNewDiv");
+    let userDiv;
+    let assistantDiv;
+    if (data.role === "user") {
+        userDiv = document.createElement("div");
+        userDiv.classList.add("userNewDiv");
+        userDiv.textContent = userInput.value;
+        userDiv.id = `user-message-${count}`;
+        arrayIDs.push(count.toString());
+        count++;
+    }
+    if (data.role === "assistant") {
+        assistantDiv = document.createElement("div");
+        assistantDiv.classList.add("assistantNewDiv");
+        assistantDiv.textContent = data.text || "";
+    }
     // let newContent = document.createTextNode(data.text || "");
-    newDiv.textContent = data.text || "";
-    if (responseElement) {
-        responseElement.appendChild(newDiv);
+    if (responseElement instanceof HTMLElement) {
+        if (data.role === "assistant" && assistantDiv) {
+            responseElement.appendChild(assistantDiv);
+        }
+        if (data.role === "user" && userDiv && (userDiv.textContent !== "")) {
+            responseElement.appendChild(userDiv);
+        }
     }
     else {
-        console.error("Response element not found");
+        console.error("Response element not found or is not an HTMLElement");
     }
     // newDiv.appendChild(newContent);
     // responseElement.appendChild(newContent);
 }
-const processedIds = new Set();
-const arrayIDs = [];
 btn.addEventListener("click", () => {
-    console.log(userInputValue);
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    // createUserElement(userInput.value);
+    // if(!arrayIDs.includes(count.toString())) {
     experimentalFunction({ text: userInput.value, role: "user" });
+    // }
+    // createUserElement(userInput.value);
     fetch("/", {
         method: "POST",
         headers: {
@@ -65,6 +83,7 @@ btn.addEventListener("click", () => {
                     // createAssistElement(messageObj);
                     // console.log(messageObj)
                     arrayIDs.push(id);
+                    console.log(arrayIDs);
                 }
                 // if(!processedIds.has(id)) {
                 //     let text: string = data.message[i].content[0].text.value;
@@ -115,8 +134,12 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 13/09/24
+// 14/09/24
 // Claude: Refactoring User and Assistant Elements in TypeScript
+// Claude: Handling Undefined Elements in TypeScript
+// Rename experimentalFunction();
+// Clean up experimentalFunction()
+// Get rid of count++
 // why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
 // Never Every TS:   throw new Error("Something has gone wrong!");
 // EXP: never, finish writing notes
