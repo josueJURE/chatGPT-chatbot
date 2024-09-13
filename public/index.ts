@@ -8,6 +8,7 @@ console.log(userInput, responseElement, btn);
 
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
+const userInputValue = userInput.value
 
 interface ChatgptData {
   text?: string;
@@ -32,6 +33,16 @@ interface ResponseData {
 }
 
 btn.addEventListener("click", () => {
+
+  console.log(userInputValue)
+
+  if( userInput.value  === "") {
+    return alert("enter your question please") 
+  }
+ 
+    createUserElement(userInput.value)
+
+     
   fetch("/", {
     method: "POST",
     headers: {
@@ -57,7 +68,7 @@ btn.addEventListener("click", () => {
           let id: string = data.message[i].id;
 
           if (!arrayIDs.includes(id)) {
-            let text: string = data.message[i].content[0].text.value;
+            let text: string = data.message[i].content[0].text.value.trim();
             let role: string = data.message[i].role;
 
             let messageObj: ChatgptData = {
@@ -66,7 +77,9 @@ btn.addEventListener("click", () => {
               id: id,
             };
 
-            buildElement(messageObj);
+            createAssistElement(messageObj);
+
+            console.log(messageObj)
 
             arrayIDs.push(id);
           }
@@ -98,20 +111,43 @@ btn.addEventListener("click", () => {
   emptyElement(userInput);
 });
 
-function buildElement(props: ChatgptData): void {
+
+
+
+
+
+
+
+function createUserElement(element: string) : void {
+    let newElement = document.createElement("div");
+    newElement.classList.add("userNewDiv");
+    let newContent = document.createTextNode(element ?? " ");
+    newElement.appendChild(newContent);
+    responseElement.appendChild(newElement)
+
+}
+
+function createAssistElement(props: ChatgptData): void {
   let newDiv = document.createElement("div");
-  newDiv.classList.add("newDiv");
+  newDiv.classList.add("assistantNewDiv");
   let newContent = document.createTextNode(props.text ?? " ");
   newDiv.appendChild(newContent);
-  console.log(newContent);
 
-  responseElement.appendChild(newDiv);
-  if (props.role) {
-    props.role === "assistant"
-      ? newDiv.classList.add("userNewDiv")
-      : newDiv.classList.add("assistantNewDiv");
+
+  
+  if (props.role && props.role === "assistant") {
+      responseElement.appendChild(newDiv);
   }
 }
+
+// function userElement() : void {
+//     let newDiv = document.createElement("div");
+//     newDiv.classList.add("newDiv");
+//     let newContent = document.createTextNode(userInput.value ?? " ");
+//     newDiv.appendChild(newContent);
+//     responseElement.appendChild(newDiv)
+//     newDiv.classList.add("assistantNewDiv");
+// }
 
 function throwError() {
   throw new Error("something has gone wrong");
@@ -121,11 +157,17 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 8/09/24
+// 13/09/24
+// Claude: Refactoring User and Assistant Elements in TypeScript
+// why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
+// Never Every TS:   throw new Error("Something has gone wrong!");
+// EXP: never, finish writing notes
+// merge createUserElement() and buildElement() into one
+// generating effect
+// notebook 68, object value at run time, tyoe widening. 
 // claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
-// find a way for question written by user to be displayed right away
 //  ChatgptData can ? be removed
 
 // 1  why empyElement() not working:                            DONE

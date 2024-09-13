@@ -6,21 +6,32 @@ const mainContainer = document.querySelector(".main-container");
 console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
+const userInputValue = userInput.value;
 const processedIds = new Set();
 const arrayIDs = [];
 btn.addEventListener("click", () => {
+    console.log(userInputValue);
+    if (userInput.value === "") {
+        return alert("enter your question please");
+    }
+    createUserElement(userInput.value);
     fetch("/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
+            // convert  into JSON to send it to an API
             input: userInput.value,
-            userId: userId // Send the user ID with each request
-        })
+            userId: userId, // Send the user ID with each request
+        }),
     })
         .then((response) => {
-        return response.status === 200 && response.ok ? response.json() : (() => { throw new Error('Something has gone wrong!'); })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
+        return response.status === 200 && response.ok
+            ? response.json()
+            : (() => {
+                throw new Error("Something has gone wrong!");
+            })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
     })
         .then((data) => {
         if (data.message) {
@@ -28,14 +39,15 @@ btn.addEventListener("click", () => {
             for (let i = 0; i < data.message.length; i++) {
                 let id = data.message[i].id;
                 if (!arrayIDs.includes(id)) {
-                    let text = data.message[i].content[0].text.value;
+                    let text = data.message[i].content[0].text.value.trim();
                     let role = data.message[i].role;
                     let messageObj = {
                         text: text,
                         role: role,
-                        id: id
+                        id: id,
                     };
-                    buildElement(messageObj);
+                    createAssistElement(messageObj);
+                    console.log(messageObj);
                     arrayIDs.push(id);
                 }
                 // if(!processedIds.has(id)) {
@@ -57,28 +69,49 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
-function buildElement(props) {
+function createUserElement(element) {
+    let newElement = document.createElement("div");
+    newElement.classList.add("userNewDiv");
+    let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
+    newElement.appendChild(newContent);
+    responseElement.appendChild(newElement);
+}
+function createAssistElement(props) {
     var _a;
     let newDiv = document.createElement("div");
-    newDiv.classList.add("newDiv");
+    newDiv.classList.add("assistantNewDiv");
     let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
     newDiv.appendChild(newContent);
-    console.log(newContent);
-    responseElement.appendChild(newDiv);
-    if (props.role) {
-        props.role === "assistant" ? newDiv.classList.add("userNewDiv") : newDiv.classList.add("assistantNewDiv");
+    if (props.role && props.role === "assistant") {
+        responseElement.appendChild(newDiv);
     }
 }
+// function userElement() : void {
+//     let newDiv = document.createElement("div");
+//     newDiv.classList.add("newDiv");
+//     let newContent = document.createTextNode(userInput.value ?? " ");
+//     newDiv.appendChild(newContent);
+//     responseElement.appendChild(newDiv)
+//     newDiv.classList.add("assistantNewDiv");
+// }
 function throwError() {
     throw new Error("something has gone wrong");
 }
 function emptyElement(element) {
     element.value = "";
 }
-// 8/09/24
-// claude: Initializing Empty Objects in TypeScript. Make sense of explanation given
+// 13/09/24
+// Claude: Refactoring User and Assistant Elements in TypeScript
+// why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
+// Never Every TS:   throw new Error("Something has gone wrong!");
+// EXP: never, finish writing notes
+// merge createUserElement() and buildElement() into one
+// generating effect
+// notebook 68, object value at run time, tyoe widening. 
+// claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
+//  ChatgptData can ? be removed
 // 1  why empyElement() not working:                            DONE
 // 2 create a function for block of code within the for loop:   DONE
 // 3 get rid of any types:                                      DONE

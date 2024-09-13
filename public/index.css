@@ -29,9 +29,10 @@
 
 
 
-.userNewDiv, 
-.assistantNewDiv
- {
+
+.userNewDiv {
+    background-color: blue;
+    margin-left: 250px;
     padding: 6px;
     margin-top: 20px;
     border: 1px black solid;
@@ -40,15 +41,17 @@
     border-radius: 15px;
     overflow-y: scroll;
     text-align: center;
-    
-}
-
-.userNewDiv {
-    background-color: blue;
-    margin-left: 250px;
 }
 
 .assistantNewDiv {
     background-color: brown;
     margin-left: 15px;
+    padding: 6px;
+    margin-top: 20px;
+    border: 1px black solid;
+    height: 70px;
+    width: 200px;
+    border-radius: 15px;
+    overflow-y: scroll;
+    text-align: center;
 }
