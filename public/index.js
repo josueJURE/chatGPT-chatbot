@@ -17,6 +17,8 @@ function createElement(param1, param2) {
 }
 function appendElement(data) {
     if (responseElement instanceof HTMLElement) {
+        // data.role === "assistant" ? responseElement.appendChild(createElement( "assistantNewDiv", data.text || "")) : responseElement.appendChild(createElement("userNewDiv", userInput.value ))
+        // data.role === "user" && userInput.value !== "" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
         if (data.role === "assistant") {
             responseElement.appendChild(createElement("assistantNewDiv", data.text || ""));
         }
