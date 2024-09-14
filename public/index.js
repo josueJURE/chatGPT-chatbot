@@ -135,11 +135,16 @@ function emptyElement(element) {
     element.value = "";
 }
 // 14/09/24
+// EXP: classes + notes
+// EXP: read notes
+// EXP next lesson,
 // Claude: Refactoring User and Assistant Elements in TypeScript
 // Claude: Handling Undefined Elements in TypeScript
 // Rename experimentalFunction();
 // Clean up experimentalFunction()
 // Get rid of count++
+// Merge current branch to the main
+// Ex P: classes
 // why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
 // Never Every TS:   throw new Error("Something has gone wrong!");
 // EXP: never, finish writing notes
