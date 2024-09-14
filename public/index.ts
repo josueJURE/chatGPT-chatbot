@@ -18,44 +18,27 @@ const arrayIDs: string[] = [];
 
 interface ChatgptData {
   text: string;
-  role: "user" | "assistant";
+  role: "user" | "assistant" ;
   id?: string;
 }
 
+function createElement(param1: string, param2: string) {
+  let div = document.createElement("div")
+  div.classList.add(param1)
+  div.textContent = param2
+  return div
+}
+
 function appendElement(data: ChatgptData) : void{
-
-  let userDiv : HTMLDivElement | undefined;
-  let assistantDiv
-
-  if(data.role === "user") {
-    userDiv = document.createElement("div");
-    userDiv.classList.add("userNewDiv");
-    userDiv.textContent = userInput.value;
-    userDiv.id = `user-message-${count}`;
-    arrayIDs.push(count.toString())
-    count++
-  } if (data.role === "assistant") {
-    assistantDiv = document.createElement("div");
-    assistantDiv.classList.add( "assistantNewDiv");
-    assistantDiv.textContent = data.text || "";
-
-  }
-
-
-  // let newContent = document.createTextNode(data.text || "");
-
-
   if (responseElement instanceof HTMLElement) {
-    if (data.role === "assistant" && assistantDiv) {
-      responseElement.appendChild(assistantDiv);
-    } if (data.role === "user" && userDiv && (userDiv.textContent !== "")) {
-      responseElement.appendChild(userDiv);
+    if (data.role === "assistant") {
+      responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
+    } else if (data.role === "user" && userInput.value !== "") {
+      responseElement.appendChild(createElement("userNewDiv", userInput.value ));
     }
   } else {
     console.error("Response element not found or is not an HTMLElement");
   }
-  // newDiv.appendChild(newContent);
-  // responseElement.appendChild(newContent);
 }
 
 
@@ -209,6 +192,9 @@ function throwError() {
 function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
+
+
+
 
 // 14/09/24
 // EXP: classes + notes
