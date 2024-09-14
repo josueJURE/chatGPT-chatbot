@@ -9,43 +9,33 @@ const userInputValue = userInput.value;
 const processedIds = new Set();
 let count = 0;
 const arrayIDs = [];
-function experimentalFunction(data) {
-    let userDiv;
-    let assistantDiv;
-    if (data.role === "user") {
-        userDiv = document.createElement("div");
-        userDiv.classList.add("userNewDiv");
-        userDiv.textContent = userInput.value;
-        userDiv.id = `user-message-${count}`;
-        arrayIDs.push(count.toString());
-        count++;
-    }
-    if (data.role === "assistant") {
-        assistantDiv = document.createElement("div");
-        assistantDiv.classList.add("assistantNewDiv");
-        assistantDiv.textContent = data.text || "";
-    }
-    // let newContent = document.createTextNode(data.text || "");
+function createElement(param1, param2) {
+    let div = document.createElement("div");
+    div.classList.add(param1);
+    div.textContent = param2;
+    return div;
+}
+function appendElement(data) {
     if (responseElement instanceof HTMLElement) {
-        if (data.role === "assistant" && assistantDiv) {
-            responseElement.appendChild(assistantDiv);
+        // data.role === "assistant" ? responseElement.appendChild(createElement( "assistantNewDiv", data.text || "")) : responseElement.appendChild(createElement("userNewDiv", userInput.value ))
+        // data.role === "user" && userInput.value !== "" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
+        if (data.role === "assistant") {
+            responseElement.appendChild(createElement("assistantNewDiv", data.text || ""));
         }
-        if (data.role === "user" && userDiv && (userDiv.textContent !== "")) {
-            responseElement.appendChild(userDiv);
+        else if (data.role === "user" && userInput.value !== "") {
+            responseElement.appendChild(createElement("userNewDiv", userInput.value));
         }
     }
     else {
         console.error("Response element not found or is not an HTMLElement");
     }
-    // newDiv.appendChild(newContent);
-    // responseElement.appendChild(newContent);
 }
 btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
     // if(!arrayIDs.includes(count.toString())) {
-    experimentalFunction({ text: userInput.value, role: "user" });
+    appendElement({ text: userInput.value, role: "user" });
     // }
     // createUserElement(userInput.value);
     fetch("/", {
@@ -79,7 +69,7 @@ btn.addEventListener("click", () => {
                     //   role: role,
                     //   id: id,
                     // };
-                    experimentalFunction({ text: text, role: role, id: id });
+                    appendElement({ text: text, role: role, id: id });
                     // createAssistElement(messageObj);
                     // console.log(messageObj)
                     arrayIDs.push(id);
