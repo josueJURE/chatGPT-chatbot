@@ -3,18 +3,51 @@ const userInput = document.querySelector(".userInput");
 const responseElement = document.querySelector(".responseElement");
 const btn = document.querySelector(".btn");
 const mainContainer = document.querySelector(".main-container");
-console.log(userInput, responseElement, btn);
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const userInputValue = userInput.value;
 const processedIds = new Set();
+let count = 0;
 const arrayIDs = [];
+function experimentalFunction(data) {
+    let userDiv;
+    let assistantDiv;
+    if (data.role === "user") {
+        userDiv = document.createElement("div");
+        userDiv.classList.add("userNewDiv");
+        userDiv.textContent = userInput.value;
+        userDiv.id = `user-message-${count}`;
+        arrayIDs.push(count.toString());
+        count++;
+    }
+    if (data.role === "assistant") {
+        assistantDiv = document.createElement("div");
+        assistantDiv.classList.add("assistantNewDiv");
+        assistantDiv.textContent = data.text || "";
+    }
+    // let newContent = document.createTextNode(data.text || "");
+    if (responseElement instanceof HTMLElement) {
+        if (data.role === "assistant" && assistantDiv) {
+            responseElement.appendChild(assistantDiv);
+        }
+        if (data.role === "user" && userDiv && (userDiv.textContent !== "")) {
+            responseElement.appendChild(userDiv);
+        }
+    }
+    else {
+        console.error("Response element not found or is not an HTMLElement");
+    }
+    // newDiv.appendChild(newContent);
+    // responseElement.appendChild(newContent);
+}
 btn.addEventListener("click", () => {
-    console.log(userInputValue);
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    createUserElement(userInput.value);
+    // if(!arrayIDs.includes(count.toString())) {
+    experimentalFunction({ text: userInput.value, role: "user" });
+    // }
+    // createUserElement(userInput.value);
     fetch("/", {
         method: "POST",
         headers: {
@@ -41,14 +74,16 @@ btn.addEventListener("click", () => {
                 if (!arrayIDs.includes(id)) {
                     let text = data.message[i].content[0].text.value.trim();
                     let role = data.message[i].role;
-                    let messageObj = {
-                        text: text,
-                        role: role,
-                        id: id,
-                    };
-                    createAssistElement(messageObj);
-                    console.log(messageObj);
+                    // let messageObj: ChatgptData = {
+                    //   text: text,
+                    //   role: role,
+                    //   id: id,
+                    // };
+                    experimentalFunction({ text: text, role: role, id: id });
+                    // createAssistElement(messageObj);
+                    // console.log(messageObj)
                     arrayIDs.push(id);
+                    console.log(arrayIDs);
                 }
                 // if(!processedIds.has(id)) {
                 //     let text: string = data.message[i].content[0].text.value;
@@ -69,23 +104,22 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
-function createUserElement(element) {
-    let newElement = document.createElement("div");
-    newElement.classList.add("userNewDiv");
-    let newContent = document.createTextNode(element !== null && element !== void 0 ? element : " ");
-    newElement.appendChild(newContent);
-    responseElement.appendChild(newElement);
-}
-function createAssistElement(props) {
-    var _a;
-    let newDiv = document.createElement("div");
-    newDiv.classList.add("assistantNewDiv");
-    let newContent = document.createTextNode((_a = props.text) !== null && _a !== void 0 ? _a : " ");
-    newDiv.appendChild(newContent);
-    if (props.role && props.role === "assistant") {
-        responseElement.appendChild(newDiv);
-    }
-}
+// function createUserElement(element: string) : void {
+//     let newElement = document.createElement("div");
+//     newElement.classList.add("userNewDiv");
+//     let newContent = document.createTextNode(element ?? " ");
+//     newElement.appendChild(newContent);
+//     responseElement.appendChild(newElement)
+// }
+// function createAssistElement(props: ChatgptData): void {
+//   let newDiv = document.createElement("div");
+//   newDiv.classList.add("assistantNewDiv");
+//   let newContent = document.createTextNode(props.text ?? " ");
+//   newDiv.appendChild(newContent);
+//   if (props.role && props.role === "assistant") {
+//       responseElement.appendChild(newDiv);
+//   }
+// }
 // function userElement() : void {
 //     let newDiv = document.createElement("div");
 //     newDiv.classList.add("newDiv");
@@ -100,8 +134,17 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 13/09/24
+// 14/09/24
+// EXP: classes + notes
+// EXP: read notes
+// EXP next lesson,
 // Claude: Refactoring User and Assistant Elements in TypeScript
+// Claude: Handling Undefined Elements in TypeScript
+// Rename experimentalFunction();
+// Clean up experimentalFunction()
+// Get rid of count++
+// Merge current branch to the main
+// Ex P: classes
 // why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
 // Never Every TS:   throw new Error("Something has gone wrong!");
 // EXP: never, finish writing notes
