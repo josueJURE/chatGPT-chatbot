@@ -22,7 +22,7 @@ interface ChatgptData {
   id?: string;
 }
 
-function experimentalFunction(data: ChatgptData) : void{
+function appendElement(data: ChatgptData) : void{
 
   let userDiv : HTMLDivElement | undefined;
   let assistantDiv
@@ -83,7 +83,7 @@ btn.addEventListener("click", () => {
   }
 
   // if(!arrayIDs.includes(count.toString())) {
-    experimentalFunction({text: userInput.value, role: "user"});
+    appendElement({text: userInput.value, role: "user"});
 
   // }
  
@@ -125,7 +125,7 @@ btn.addEventListener("click", () => {
             //   id: id,
             // };
 
-            experimentalFunction({ text: text, role: role as 'user' | 'assistant', id: id });
+            appendElement({ text: text, role: role as 'user' | 'assistant', id: id });
 
             
             // createAssistElement(messageObj);
