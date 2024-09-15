@@ -30,16 +30,7 @@ function createElement(classElement: string, param2: string) {
 
 function appendElement(data: ChatgptData): void {
   if (responseElement instanceof HTMLElement) {
-    // data.role === "assistant" ? responseElement.appendChild(createElement( "assistantNewDiv", data.text || "")) : responseElement.appendChild(createElement("userNewDiv", userInput.value ))
-    // data.role === "user" && userInput.value !== "" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
-
-    if (data.role === "assistant") {
-      responseElement.appendChild(
-        createElement("assistantNewDiv", data.text || "")
-      );
-    } else if (data.role === "user" && userInput.value !== "") {
-      responseElement.appendChild(createElement("userNewDiv", userInput.value));
-    }
+    data.role === "assistant" ? responseElement.appendChild(createElement( "assistantNewDiv", data.text || "")) : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value ));
   } else {
     console.error("Response element not found or is not an HTMLElement");
   }
@@ -151,11 +142,11 @@ function emptyElement(element: HTMLInputElement): void {
 // 15/09/24
 // re-read your code base first
 
-// understand why ternary operator ducplicates elements
 // user Set Object instead of arrayIDs.
 // EXP: classes + notes
 // EXP: read notes
 // EXP next lesson,
+// make it work: userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
 // Claude: Refactoring User and Assistant Elements in TypeScript
 // Claude: Handling Undefined Elements in TypeScript
 // Rename experimentalFunction();
