@@ -5,26 +5,27 @@ const btn = document.querySelector(".btn");
 const mainContainer = document.querySelector(".main-container");
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
-const userInputValue = userInput.value;
+// const userInputValue = userInput.value;
 const processedIds = new Set();
-let count = 0;
+// let count: number = 0;
 const arrayIDs = [];
-function createElement(param1, param2) {
+function createElement(classElement, param2) {
     let div = document.createElement("div");
-    div.classList.add(param1);
+    div.classList.add(classElement);
     div.textContent = param2;
     return div;
 }
 function appendElement(data) {
     if (responseElement instanceof HTMLElement) {
-        // data.role === "assistant" ? responseElement.appendChild(createElement( "assistantNewDiv", data.text || "")) : responseElement.appendChild(createElement("userNewDiv", userInput.value ))
-        // data.role === "user" && userInput.value !== "" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
-        if (data.role === "assistant") {
-            responseElement.appendChild(createElement("assistantNewDiv", data.text || ""));
-        }
-        else if (data.role === "user" && userInput.value !== "") {
-            responseElement.appendChild(createElement("userNewDiv", userInput.value));
-        }
+        data.role === "assistant" ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "")) : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
+        // userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
+        // if (data.role === "assistant") {
+        //   responseElement.appendChild(
+        //     createElement("assistantNewDiv", data.text || "")
+        //   );
+        // } else if (data.role === "user" && userInput.value !== "") {
+        //   responseElement.appendChild(createElement("userNewDiv", userInput.value));
+        // }
     }
     else {
         console.error("Response element not found or is not an HTMLElement");
@@ -34,10 +35,7 @@ btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    // if(!arrayIDs.includes(count.toString())) {
     appendElement({ text: userInput.value, role: "user" });
-    // }
-    // createUserElement(userInput.value);
     fetch("/", {
         method: "POST",
         headers: {
@@ -69,7 +67,11 @@ btn.addEventListener("click", () => {
                     //   role: role,
                     //   id: id,
                     // };
-                    appendElement({ text: text, role: role, id: id });
+                    appendElement({
+                        text: text,
+                        role: role,
+                        id: id,
+                    });
                     // createAssistElement(messageObj);
                     // console.log(messageObj)
                     arrayIDs.push(id);
@@ -94,37 +96,16 @@ btn.addEventListener("click", () => {
     });
     emptyElement(userInput);
 });
-// function createUserElement(element: string) : void {
-//     let newElement = document.createElement("div");
-//     newElement.classList.add("userNewDiv");
-//     let newContent = document.createTextNode(element ?? " ");
-//     newElement.appendChild(newContent);
-//     responseElement.appendChild(newElement)
-// }
-// function createAssistElement(props: ChatgptData): void {
-//   let newDiv = document.createElement("div");
-//   newDiv.classList.add("assistantNewDiv");
-//   let newContent = document.createTextNode(props.text ?? " ");
-//   newDiv.appendChild(newContent);
-//   if (props.role && props.role === "assistant") {
-//       responseElement.appendChild(newDiv);
-//   }
-// }
-// function userElement() : void {
-//     let newDiv = document.createElement("div");
-//     newDiv.classList.add("newDiv");
-//     let newContent = document.createTextNode(userInput.value ?? " ");
-//     newDiv.appendChild(newContent);
-//     responseElement.appendChild(newDiv)
-//     newDiv.classList.add("assistantNewDiv");
-// }
 function throwError() {
     throw new Error("something has gone wrong");
 }
 function emptyElement(element) {
     element.value = "";
 }
-// 14/09/24
+// 15/09/24
+// re-read your code base first
+// understand why ternary operator ducplicates elements
+// user Set Object instead of arrayIDs.
 // EXP: classes + notes
 // EXP: read notes
 // EXP next lesson,
@@ -140,7 +121,7 @@ function emptyElement(element) {
 // EXP: never, finish writing notes
 // merge createUserElement() and buildElement() into one
 // generating effect
-// notebook 68, object value at run time, tyoe widening. 
+// notebook 68, object value at run time, tyoe widening.
 // claude: Initializing Empty Objects in TypeScript:  "which is faster using arrayIDs or processedIds"
 // why Object.values(emptyObj).includes(id) didn't work
 // EXP  type guard  & coallescing null
