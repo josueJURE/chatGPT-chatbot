@@ -21,10 +21,10 @@ interface ChatgptData {
   id?: string;
 }
 
-function createElement(classElement: string, param2: string) {
+function createElement(classElement: string, textString: string) {
   let div = document.createElement("div");
   div.classList.add(classElement);
-  div.textContent = param2;
+  div.textContent = textString;
   return div;
 }
 
