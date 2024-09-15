@@ -7,11 +7,11 @@ const mainContainer = document.querySelector(".main-container") as HTMLElement;
 
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
-const userInputValue = userInput.value;
+// const userInputValue = userInput.value;
 
 const processedIds = new Set<string>();
 
-let count: number = 0;
+// let count: number = 0;
 
 const arrayIDs: string[] = [];
 
@@ -21,9 +21,9 @@ interface ChatgptData {
   id?: string;
 }
 
-function createElement(param1: string, param2: string) {
+function createElement(classElement: string, param2: string) {
   let div = document.createElement("div");
-  div.classList.add(param1);
+  div.classList.add(classElement);
   div.textContent = param2;
   return div;
 }
@@ -149,6 +149,8 @@ function emptyElement(element: HTMLInputElement): void {
 }
 
 // 15/09/24
+// re-read your code base first
+
 // understand why ternary operator ducplicates elements
 // user Set Object instead of arrayIDs.
 // EXP: classes + notes
