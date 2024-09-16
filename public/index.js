@@ -5,27 +5,19 @@ const btn = document.querySelector(".btn");
 const mainContainer = document.querySelector(".main-container");
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
-// const userInputValue = userInput.value;
 const processedIds = new Set();
-// let count: number = 0;
-const arrayIDs = [];
-function createElement(classElement, param2) {
+function createElement(classElement, textString) {
     let div = document.createElement("div");
     div.classList.add(classElement);
-    div.textContent = param2;
+    div.textContent = textString;
     return div;
 }
 function appendElement(data) {
     if (responseElement instanceof HTMLElement) {
-        data.role === "assistant" ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "")) : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
-        // userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
-        // if (data.role === "assistant") {
-        //   responseElement.appendChild(
-        //     createElement("assistantNewDiv", data.text || "")
-        //   );
-        // } else if (data.role === "user" && userInput.value !== "") {
-        //   responseElement.appendChild(createElement("userNewDiv", userInput.value));
-        // }
+        data.role === "assistant"
+            ? responseElement.appendChild(createElement("assistantNewDiv", data.text || ""))
+            : userInput.value !== "" &&
+                responseElement.appendChild(createElement("userNewDiv", userInput.value));
     }
     else {
         console.error("Response element not found or is not an HTMLElement");
@@ -59,37 +51,18 @@ btn.addEventListener("click", () => {
             console.log(data.message);
             for (let i = 0; i < data.message.length; i++) {
                 let id = data.message[i].id;
-                if (!arrayIDs.includes(id)) {
-                    let text = data.message[i].content[0].text.value.trim();
+                if (!processedIds.has(id)) {
+                    let text = data.message[i].content[0].text.value;
                     let role = data.message[i].role;
-                    // let messageObj: ChatgptData = {
-                    //   text: text,
-                    //   role: role,
-                    //   id: id,
-                    // };
-                    appendElement({
+                    let messageObj = {
                         text: text,
                         role: role,
                         id: id,
-                    });
-                    // createAssistElement(messageObj);
-                    // console.log(messageObj)
-                    arrayIDs.push(id);
-                    console.log(arrayIDs);
+                    };
+                    appendElement(messageObj);
+                    processedIds.add(id);
+                    console.log({ elementData: messageObj.id });
                 }
-                // if(!processedIds.has(id)) {
-                //     let text: string = data.message[i].content[0].text.value;
-                //     let role: string =  data.message[i].role;
-                //     let  messageObj: ChatgptData = {
-                //         text: text,
-                //         role: role,
-                //         id: id
-                //     };
-                //     buildElement( messageObj);
-                //     processedIds.add(id)
-                //     console.log({elementData:  messageObj.id})
-                // }
-                // buildElement(emptyObj);
                 console.log(data.message[i].role);
             }
         }
@@ -102,22 +75,19 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 15/09/24
+// 16/09/24
 // re-read your code base first
-// understand why ternary operator ducplicates elements
-// user Set Object instead of arrayIDs.
+// Never Every TS:   throw new Error("Something has gone wrong!");
+// as keyword in messageObj, reread EXP
+// strictNullChecks
 // EXP: classes + notes
 // EXP: read notes
 // EXP next lesson,
+// make it work: userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
 // Claude: Refactoring User and Assistant Elements in TypeScript
 // Claude: Handling Undefined Elements in TypeScript
-// Rename experimentalFunction();
-// Clean up experimentalFunction()
-// Get rid of count++
-// Merge current branch to the main
 // Ex P: classes
 // why code doesn't work whenn I use const userInputValue = userInput.value. Read claude: Error with OpenAI API request
-// Never Every TS:   throw new Error("Something has gone wrong!");
 // EXP: never, finish writing notes
 // merge createUserElement() and buildElement() into one
 // generating effect
