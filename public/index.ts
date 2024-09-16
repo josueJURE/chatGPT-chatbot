@@ -114,10 +114,11 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 15/09/24
+// 16/09/24
 // re-read your code base first
 // Never Every TS:   throw new Error("Something has gone wrong!");
 // as keyword in messageObj, reread EXP
+// strictNullChecks
 
 // EXP: classes + notes
 // EXP: read notes
