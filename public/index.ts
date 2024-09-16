@@ -119,8 +119,9 @@ function emptyElement(element: HTMLInputElement): void {
 
 // 16/09/24
 // re-read your code base first
-// Never Every TS:   throw new Error("Something has gone wrong!");
-// as keyword in messageObj, reread EXP
+// as keyword in messageObj, claude: Using Type Assertion with TypeScript
+// EXP: Error Handling With Unions
+// Claude Discriminated Unions
 
 
 // EXP: classes + notes
