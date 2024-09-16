@@ -16,6 +16,8 @@ interface ChatgptData {
   id?: string;
 }
 
+
+
 function createElement(classElement: string, textString: string) {
   let div = document.createElement("div");
   div.classList.add(classElement);
@@ -54,6 +56,8 @@ btn.addEventListener("click", () => {
   if (userInput.value === "") {
     return alert("enter your question please");
   }
+
+  userInput.style.display = "none"
 
   appendElement({ text: userInput.value, role: "user" });
 
@@ -107,6 +111,7 @@ btn.addEventListener("click", () => {
     });
 
   emptyElement(userInput);
+  userInput.style.display = "block"
 });
 
 function throwError() : never {

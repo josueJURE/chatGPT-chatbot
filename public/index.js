@@ -27,6 +27,7 @@ btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
+    userInput.style.display = "none";
     appendElement({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
@@ -43,7 +44,10 @@ btn.addEventListener("click", () => {
         return response.status === 200 && response.ok
             ? response.json()
             : (() => {
-                throw new Error("Something has gone wrong!");
+                const throwError = () => {
+                    throw new Error("Something has gone wrong!");
+                };
+                return throwError();
             })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
     })
         .then((data) => {
@@ -77,9 +81,9 @@ function emptyElement(element) {
 }
 // 16/09/24
 // re-read your code base first
-// Never Every TS:   throw new Error("Something has gone wrong!");
-// as keyword in messageObj, reread EXP
-// strictNullChecks
+// as keyword in messageObj, claude: Using Type Assertion with TypeScript
+// EXP: Error Handling With Unions
+// Claude Discriminated Unions
 // EXP: classes + notes
 // EXP: read notes
 // EXP next lesson,
