@@ -72,7 +72,10 @@ btn.addEventListener("click", () => {
       return response.status === 200 && response.ok
         ? response.json()
         : (() => {
+          const throwError = () : never => {
             throw new Error("Something has gone wrong!");
+          };
+          return throwError();
           })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
     })
     .then((data: ResponseData) => {
@@ -106,7 +109,7 @@ btn.addEventListener("click", () => {
   emptyElement(userInput);
 });
 
-function throwError() {
+function throwError() : never {
   throw new Error("something has gone wrong");
 }
 
@@ -118,7 +121,7 @@ function emptyElement(element: HTMLInputElement): void {
 // re-read your code base first
 // Never Every TS:   throw new Error("Something has gone wrong!");
 // as keyword in messageObj, reread EXP
-// strictNullChecks
+
 
 // EXP: classes + notes
 // EXP: read notes
