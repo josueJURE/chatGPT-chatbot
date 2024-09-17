@@ -10,13 +10,13 @@ const userId = Math.random().toString(36).substring(7);
 
 const processedIds = new Set<string>();
 
+console.log(userInput);
+
 interface ChatgptData {
   text: string;
   role: "user" | "assistant";
   id?: string;
 }
-
-
 
 function createElement(classElement: string, textString: string) {
   let div = document.createElement("div");
@@ -52,12 +52,19 @@ interface ResponseData {
   }>;
 }
 
+function setElementDisplay(
+  element: HTMLElement | HTMLInputElement,
+  display: string
+): void {
+  element.style.display = display;
+}
+
 btn.addEventListener("click", () => {
   if (userInput.value === "") {
     return alert("enter your question please");
   }
 
-  userInput.style.display = "none"
+  setElementDisplay(userInput, "none");
 
   appendElement({ text: userInput.value, role: "user" });
 
@@ -76,10 +83,10 @@ btn.addEventListener("click", () => {
       return response.status === 200 && response.ok
         ? response.json()
         : (() => {
-          const throwError = () : never => {
-            throw new Error("Something has gone wrong!");
-          };
-          return throwError();
+            const throwError = (): never => {
+              throw new Error("Something has gone wrong!");
+            };
+            return throwError();
           })(); ///In JavaScript, the ternary operator expects expressions on both sides of the colon. The throw statement is not an expression; it's a statement. Statements cannot be used where JavaScript expects an expression. Hence the immediately invoked function expression (IIFE)
     })
     .then((data: ResponseData) => {
@@ -100,6 +107,8 @@ btn.addEventListener("click", () => {
 
             appendElement(messageObj);
 
+            setElementDisplay(userInput, "block");
+
             processedIds.add(id);
 
             console.log({ elementData: messageObj.id });
@@ -111,10 +120,9 @@ btn.addEventListener("click", () => {
     });
 
   emptyElement(userInput);
-  userInput.style.display = "block"
 });
 
-function throwError() : never {
+function throwError(): never {
   throw new Error("something has gone wrong");
 }
 
@@ -122,12 +130,11 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 16/09/24
+// 17/09/24
 // re-read your code base first
 // as keyword in messageObj, claude: Using Type Assertion with TypeScript
 // EXP: Error Handling With Unions
 // Claude Discriminated Unions
-
 
 // EXP: classes + notes
 // EXP: read notes

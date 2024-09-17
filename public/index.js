@@ -6,6 +6,7 @@ const mainContainer = document.querySelector(".main-container");
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();
+console.log(userInput);
 function createElement(classElement, textString) {
     let div = document.createElement("div");
     div.classList.add(classElement);
@@ -23,11 +24,14 @@ function appendElement(data) {
         console.error("Response element not found or is not an HTMLElement");
     }
 }
+function setElementToDisplayNone(element, display) {
+    element.style.display = display;
+}
 btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    userInput.style.display = "none";
+    setElementToDisplayNone(userInput, "none");
     appendElement({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
@@ -64,6 +68,7 @@ btn.addEventListener("click", () => {
                         id: id,
                     };
                     appendElement(messageObj);
+                    setElementToDisplayNone(userInput, "block");
                     processedIds.add(id);
                     console.log({ elementData: messageObj.id });
                 }
@@ -79,8 +84,9 @@ function throwError() {
 function emptyElement(element) {
     element.value = "";
 }
-// 16/09/24
+// 17/09/24
 // re-read your code base first
+//userInput.style.display = "none"  but userInput.style.display = "block" not working
 // as keyword in messageObj, claude: Using Type Assertion with TypeScript
 // EXP: Error Handling With Unions
 // Claude Discriminated Unions
