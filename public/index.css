@@ -55,3 +55,13 @@
     overflow-y: scroll;
     text-align: center;
 }
+
+.userInput {
+   
+    width: 200px;
+    height: 30px;
+}
+
+.displayNone {
+    display: none;
+}
