@@ -130,16 +130,17 @@ function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 17/09/24
+// 18/09/24
 // re-read your code base first
+// Claude: Explaining the TypeScript "as" keyword
+// EXP: Impossible Intersections
 // as keyword in messageObj, claude: Using Type Assertion with TypeScript
 // EXP: Error Handling With Unions
 // Claude Discriminated Unions
 
 // EXP: classes + notes
 // EXP: read notes
-// EXP next lesson,
-// make it work: userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
+
 // Claude: Refactoring User and Assistant Elements in TypeScript
 // Claude: Handling Undefined Elements in TypeScript
 // Ex P: classes
