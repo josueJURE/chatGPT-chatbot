@@ -16,6 +16,8 @@
     /* display: flex; */
     overflow: hidden;
     overflow-y: scroll;
+    background-image: url("./images/Designer_3.png");
+    background-size: cover;
 }
 
 .flex-start {
