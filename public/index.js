@@ -24,14 +24,14 @@ function appendElement(data) {
         console.error("Response element not found or is not an HTMLElement");
     }
 }
-function setElementToDisplayNone(element, display) {
+function setElementDisplay(element, display) {
     element.style.display = display;
 }
 btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    setElementToDisplayNone(userInput, "none");
+    setElementDisplay(userInput, "none");
     appendElement({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
@@ -68,32 +68,31 @@ btn.addEventListener("click", () => {
                         id: id,
                     };
                     appendElement(messageObj);
-                    setElementToDisplayNone(userInput, "block");
+                    setElementDisplay(userInput, "block");
                     processedIds.add(id);
-                    console.log({ elementData: messageObj.id });
                 }
-                console.log(data.message[i].role);
             }
         }
     });
     emptyElement(userInput);
 });
-function throwError() {
-    throw new Error("something has gone wrong");
-}
 function emptyElement(element) {
     element.value = "";
 }
-// 17/09/24
-// re-read your code base first
-//userInput.style.display = "none"  but userInput.style.display = "block" not working
+// 18/09/24 3-hour study session
+// re-read your frontend and backend code base first
+// create a note file/foder and add it to gitigore
+//  Does app remember context
+//  Add backgroung picture
+//  overflow
+// Deploy app on Azure
+// Claude: Explaining the TypeScript "as" keyword
+// EXP: Impossible Intersections
 // as keyword in messageObj, claude: Using Type Assertion with TypeScript
 // EXP: Error Handling With Unions
 // Claude Discriminated Unions
 // EXP: classes + notes
 // EXP: read notes
-// EXP next lesson,
-// make it work: userInput.value !== "" &&  data.role === "user" ? responseElement.appendChild(createElement("userNewDiv", userInput.value )) : responseElement.appendChild(createElement( "assistantNewDiv", data.text || ""));
 // Claude: Refactoring User and Assistant Elements in TypeScript
 // Claude: Handling Undefined Elements in TypeScript
 // Ex P: classes

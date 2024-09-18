@@ -18,6 +18,18 @@ interface ChatgptData {
   id?: string;
 }
 
+interface ResponseData {
+  message: Array<{
+    role: string;
+    content: Array<{
+      text: {
+        value: string;
+      };
+    }>;
+    id: string;
+  }>;
+}
+
 function createElement(classElement: string, textString: string) {
   let div = document.createElement("div");
   div.classList.add(classElement);
@@ -38,18 +50,6 @@ function appendElement(data: ChatgptData): void {
   } else {
     console.error("Response element not found or is not an HTMLElement");
   }
-}
-
-interface ResponseData {
-  message: Array<{
-    role: string;
-    content: Array<{
-      text: {
-        value: string;
-      };
-    }>;
-    id: string;
-  }>;
 }
 
 function setElementDisplay(
@@ -110,11 +110,7 @@ btn.addEventListener("click", () => {
             setElementDisplay(userInput, "block");
 
             processedIds.add(id);
-
-            console.log({ elementData: messageObj.id });
           }
-
-          console.log(data.message[i].role);
         }
       }
     });
@@ -122,16 +118,17 @@ btn.addEventListener("click", () => {
   emptyElement(userInput);
 });
 
-function throwError(): never {
-  throw new Error("something has gone wrong");
-}
-
 function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
 
-// 18/09/24
-// re-read your code base first
+// 18/09/24 3-hour study session
+// re-read your frontend and backend code base first
+// create a note file/foder and add it to gitigore
+//  Does app remember context
+//  Add backgroung picture
+//  overflow
+// Deploy app on Azure
 // Claude: Explaining the TypeScript "as" keyword
 // EXP: Impossible Intersections
 // as keyword in messageObj, claude: Using Type Assertion with TypeScript
