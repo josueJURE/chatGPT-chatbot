@@ -69,3 +69,16 @@
 .displayNone {
     display: none;
 }
+
+
+
+    h1 {
+        width: 377px;
+        /* text-wrap: balance; */
+        text-align: center;
+        background-color: var(--green);
+        border-radius: 5px;
+        margin: auto;
+        transition: background-color 0.5s ease;
+        border: 2px black solid;
+    }
