@@ -26,13 +26,20 @@ function appendElement(data) {
     }
 }
 function setElementDisplay(element, display) {
-    element.style.display = display;
+    if (element.classList.value === "displayNone") {
+        element.classList.remove("displayNone");
+        element.classList.add(display);
+    }
+    else if (element.classList.value !== "displayNone") {
+        element.classList.remove("display");
+        element.classList.add(display);
+    }
 }
 btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    setElementDisplay(inputAndButton, "none");
+    setElementDisplay(inputAndButton, "displayNone");
     appendElement({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
@@ -69,7 +76,7 @@ btn.addEventListener("click", () => {
                         id: id,
                     };
                     appendElement(messageObj);
-                    setElementDisplay(inputAndButton, "block");
+                    setElementDisplay(inputAndButton, "display");
                     processedIds.add(id);
                 }
             }
