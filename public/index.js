@@ -3,6 +3,7 @@ const userInput = document.querySelector(".userInput");
 const responseElement = document.querySelector(".responseElement");
 const btn = document.querySelector(".btn");
 const mainContainer = document.querySelector(".main-container");
+const inputAndButton = document.querySelector(".inputAndButton");
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();

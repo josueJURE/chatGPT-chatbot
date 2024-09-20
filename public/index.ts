@@ -4,6 +4,9 @@ const responseElement = document.querySelector(
 ) as HTMLElement;
 const btn = document.querySelector(".btn") as HTMLButtonElement;
 const mainContainer = document.querySelector(".main-container") as HTMLElement;
+const inputAndButton = document.querySelector(".inputAndButton") as HTMLElement
+
+
 
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
