@@ -17,7 +17,6 @@ const userThreads = new Map();
 
 app.post("/", async (req, res) => {
     const { input, userId } = req.body;
-    console.log(input);
 
     let threadId;
     if (userThreads.has(userId)) {

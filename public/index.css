@@ -62,7 +62,11 @@
 
 .userInput {
    
-    width: 200px;
+    width: 120px;
+    height: 26px;
+}
+
+.btn {
     height: 30px;
 }
 
