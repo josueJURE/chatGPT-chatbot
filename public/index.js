@@ -32,7 +32,7 @@ btn.addEventListener("click", () => {
     if (userInput.value === "") {
         return alert("enter your question please");
     }
-    setElementDisplay(userInput, "none");
+    setElementDisplay(inputAndButton, "none");
     appendElement({ text: userInput.value, role: "user" });
     fetch("/", {
         method: "POST",
@@ -69,7 +69,7 @@ btn.addEventListener("click", () => {
                         id: id,
                     };
                     appendElement(messageObj);
-                    setElementDisplay(userInput, "block");
+                    setElementDisplay(inputAndButton, "block");
                     processedIds.add(id);
                 }
             }

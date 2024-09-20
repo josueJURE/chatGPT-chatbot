@@ -67,7 +67,7 @@ btn.addEventListener("click", () => {
     return alert("enter your question please");
   }
 
-  setElementDisplay(userInput, "none");
+  setElementDisplay(inputAndButton, "none");
 
   appendElement({ text: userInput.value, role: "user" });
 
@@ -110,7 +110,7 @@ btn.addEventListener("click", () => {
 
             appendElement(messageObj);
 
-            setElementDisplay(userInput, "block");
+            setElementDisplay(inputAndButton, "block");
 
             processedIds.add(id);
           }
