@@ -55,6 +55,10 @@ function appendElement(data: ChatgptData): void {
   }
 }
 
+
+
+
+
 function setElementDisplay(
   element: HTMLElement | HTMLInputElement,
   display: string
