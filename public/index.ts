@@ -55,11 +55,22 @@ function appendElement(data: ChatgptData): void {
   }
 }
 
+
+
+
+
 function setElementDisplay(
   element: HTMLElement | HTMLInputElement,
   display: string
 ): void {
-  element.style.display = display;
+  if (element.classList.value === "displayNone" ) {
+    element.classList.remove("displayNone")
+    element.classList.add(display)
+  } else if (element.classList.value !== "displayNone") {
+    element.classList.remove("display")
+    element.classList.add(display)
+
+  }
 }
 
 btn.addEventListener("click", () => {
@@ -67,7 +78,7 @@ btn.addEventListener("click", () => {
     return alert("enter your question please");
   }
 
-  setElementDisplay(userInput, "none");
+  setElementDisplay(inputAndButton, "displayNone");
 
   appendElement({ text: userInput.value, role: "user" });
 
@@ -110,7 +121,7 @@ btn.addEventListener("click", () => {
 
             appendElement(messageObj);
 
-            setElementDisplay(userInput, "block");
+            setElementDisplay(inputAndButton, "display");
 
             processedIds.add(id);
           }
