@@ -43,7 +43,7 @@
 
 
 .userNewDiv {
-    background-color: blue;
+    background-color: rgb(84, 84, 171);
     margin-left: 250px;
     padding: 6px;
     margin-top: 20px;
@@ -55,7 +55,7 @@
 }
 
 .assistantNewDiv {
-    background-color: brown;
+    background-color: rgb(164, 126, 95);
     margin-left: 15px;
     padding: 6px;
     margin-top: 20px;

@@ -34,7 +34,8 @@ interface ResponseData {
 }
 
 function createElement(classElement: string, textString: string) {
-  let div = document.createElement("div");
+  let div = document.createElement("textarea");
+  div.setAttribute("disabled", "true");
   div.classList.add(classElement);
   div.textContent = textString;
   return div;
