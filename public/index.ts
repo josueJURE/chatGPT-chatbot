@@ -55,7 +55,11 @@ function appendElement(data: ChatgptData): void {
   }
 }
 
+function toggleDisplay(element: HTMLInputElement, display: string) {
+  element.classList.remove("displayNone")
+  element.classList.add(display)
 
+}
 
 
 

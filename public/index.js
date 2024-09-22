@@ -25,6 +25,10 @@ function appendElement(data) {
         console.error("Response element not found or is not an HTMLElement");
     }
 }
+function toggleDisplay(element, display) {
+    element.classList.remove("displayNone");
+    element.classList.add(display);
+}
 function setElementDisplay(element, display) {
     if (element.classList.value === "displayNone") {
         element.classList.remove("displayNone");

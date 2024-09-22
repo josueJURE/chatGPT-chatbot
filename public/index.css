@@ -1,3 +1,11 @@
+      
+      * {
+        font-family: "Gowun Batang", serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+
 .parent-container {
     border: 1px red solid;
     height: 100vh;
@@ -75,14 +83,15 @@
 }
 
 
-
     h1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 377px;
-        /* text-wrap: balance; */
-        text-align: center;
-        background-color: var(--green);
+        height: 110px;
+        background-color: white;
         border-radius: 5px;
-        margin: auto;
+        margin: 10px auto;
         transition: background-color 0.5s ease;
         border: 2px black solid;
     }
@@ -93,3 +102,4 @@
         margin-left: 309px;
         margin-top: 10px;
     }
+
