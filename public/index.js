@@ -9,7 +9,8 @@ const userId = Math.random().toString(36).substring(7);
 const processedIds = new Set();
 console.log(userInput);
 function createElement(classElement, textString) {
-    let div = document.createElement("div");
+    let div = document.createElement("textarea");
+    div.setAttribute("disabled", "true");
     div.classList.add(classElement);
     div.textContent = textString;
     return div;
@@ -24,6 +25,10 @@ function appendElement(data) {
     else {
         console.error("Response element not found or is not an HTMLElement");
     }
+}
+function toggleDisplay(element, display) {
+    element.classList.remove("displayNone");
+    element.classList.add(display);
 }
 function setElementDisplay(element, display) {
     if (element.classList.value === "displayNone") {

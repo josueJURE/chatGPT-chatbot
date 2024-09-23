@@ -1,3 +1,11 @@
+      
+      * {
+        font-family: "Gowun Batang", serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+
 .parent-container {
     border: 1px red solid;
     height: 100vh;
@@ -35,12 +43,12 @@
 
 
 .userNewDiv {
-    background-color: blue;
+    /* background-color: rgb(84, 84, 171); */
+    background-color: hsla(240,7%,62%,1);
     margin-left: 250px;
     padding: 6px;
     margin-top: 20px;
     border: 1px black solid;
-    height: 70px;
     width: 200px;
     border-radius: 15px;
     overflow-y: scroll;
@@ -48,7 +56,7 @@
 }
 
 .assistantNewDiv {
-    background-color: brown;
+    background-color: rgb(164, 126, 95);
     margin-left: 15px;
     padding: 6px;
     margin-top: 20px;
@@ -61,13 +69,15 @@
 }
 
 .userInput {
-   
     width: 120px;
     height: 26px;
+    margin-left: 10px;
+    border-radius: 5px;
 }
 
 .btn {
     height: 30px;
+    border-radius: 5px;
 }
 
 .displayNone {
@@ -75,14 +85,15 @@
 }
 
 
-
     h1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 377px;
-        /* text-wrap: balance; */
-        text-align: center;
-        background-color: var(--green);
+        height: 110px;
+        background-color: white;
         border-radius: 5px;
-        margin: auto;
+        margin: 10px auto;
         transition: background-color 0.5s ease;
         border: 2px black solid;
     }
@@ -93,3 +104,4 @@
         margin-left: 309px;
         margin-top: 10px;
     }
+
