@@ -51,6 +51,8 @@ btn.addEventListener("click", () => {
   const eventSource = new EventSource(`/api?input=${encodeURIComponent(userInput.value)}&userId=${userId}`);
 
 
+
+
   let assistantResponse = '';
 
   eventSource.onmessage = (event) => {
