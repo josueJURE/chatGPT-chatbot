@@ -8,9 +8,11 @@ const inputAndButton = document.querySelector(".inputAndButton");
 const userId = Math.random().toString(36).substring(7);
 function createElement(classElement, textString) {
     let div = document.createElement("textarea");
+    // let div = document.createElement("div");
     div.setAttribute("disabled", "true");
     div.classList.add(classElement);
-    div.textContent = textString;
+    div.value += textString;
+    // div.textContent  += textString;
     return div;
 }
 function appendElement(data) {
@@ -34,18 +36,28 @@ btn.addEventListener("click", () => {
     else
         setElementDisplay(inputAndButton, "displayNone");
     appendElement({ text: userInput.value, role: "user" });
+    appendElement({ role: "assistant" });
     const eventSource = new EventSource(`/api?input=${encodeURIComponent(userInput.value)}&userId=${userId}`);
-    let assistantResponse = '';
+    // let assistantResponse = '';
     eventSource.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.content) {
-            assistantResponse += data.content;
-            // Update the response element with the current accumulated response
             if (responseElement.lastChild instanceof HTMLElement && responseElement.lastChild.classList.contains('assistantNewDiv')) {
-                responseElement.lastChild.value = assistantResponse;
+                const textArea = responseElement.lastChild;
+                textArea.value += data.content;
+                if (data.status === 'in_progress') {
+                    textArea.classList.add('in-progress');
+                }
+                else if (data.status === 'completed') {
+                    textArea.classList.remove('in-progress');
+                }
             }
             else {
-                appendElement({ text: assistantResponse, role: "assistant" });
+                const newElement = createElement("assistantNewDiv", data.content);
+                if (data.status === 'in_progress') {
+                    newElement.classList.add('in-progress');
+                }
+                responseElement.appendChild(newElement);
             }
         }
     };

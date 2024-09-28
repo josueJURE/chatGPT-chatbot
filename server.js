@@ -13,13 +13,30 @@ const openai = new OpenAI({
 // Create a Map to store threads for each user
 const userThreads = new Map();
 
-app.get("/api", async (req, res) => {
-    console.log(req.query)
-    const { input, userId } = req.query;
-    
+// Create the assistant once and store its ID
+let assistantId;
 
-    console.log(`####${typeof input}`)
-    if (!input && !userId) {
+async function createAssistant() {
+    try {
+        const myAssistant = await openai.beta.assistants.create({
+            instructions: "You are the best Chef in the world. You give advice to people on how to cook",
+            name: "Personalised Chef",
+            tools: [{ type: "code_interpreter" }],
+            model: "gpt-4",
+        });
+        assistantId = myAssistant.id;
+    } catch (error) {
+        console.error("Error creating assistant:", error);
+        throw error;
+    }
+}
+
+createAssistant();
+
+app.get("/api", async (req, res) => {
+    const { input, userId } = req.query;
+
+    if (!input || !userId) {
         return res.status(400).json({ error: "Missing input or userId" });
     }
 
@@ -32,29 +49,10 @@ app.get("/api", async (req, res) => {
         userThreads.set(userId, threadId);
     }
 
-    let assistantId;
-    try {
-        const myAssistant = await openai.beta.assistants.create({
-            instructions: "You are the best Chef in the world. You give advice to people on how to cook",
-            name: "Personalised Chef",
-            tools: [{ type: "code_interpreter" }],
-            model: "gpt-4",
-        });
-        assistantId = myAssistant.id;
-    } catch (error) {
-        console.error("Error creating assistant:", error);
-        return res.status(500).json({ error: "Failed to create assistant" });
-    }
-
-    
-
     try {
         await openai.beta.threads.messages.create(threadId, {
             role: "user",
-             content : input
-            // content: input
-           
-            
+            content: input
         });
     } catch (error) {
         console.error("Error creating message:", error);
@@ -67,13 +65,12 @@ app.get("/api", async (req, res) => {
         'Connection': 'keep-alive'
     });
 
-
-
     try {
         const run = await openai.beta.threads.runs.create(threadId, { assistant_id: assistantId });
-        
+
         while (true) {
             const runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+            
             if (runStatus.status === 'completed') {
                 const messages = await openai.beta.threads.messages.list(threadId);
                 const lastMessageForRun = messages.data
@@ -81,20 +78,39 @@ app.get("/api", async (req, res) => {
                     .pop();
 
                 if (lastMessageForRun) {
-                    res.write(`data: ${JSON.stringify({ content: lastMessageForRun.content[0].text.value })}\n\n`);
+                    const content = lastMessageForRun.content[0]?.text?.value || "";
+                    const chunks = content.match(/.{1,4}/g) || [];
+
+                    for (const chunk of chunks) {
+                        res.write(`data: ${JSON.stringify({ content: chunk, status: 'completed' })}\n\n`);
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
                 }
                 break;
+            } else if (runStatus.status === 'in_progress') {
+                const messages = await openai.beta.threads.messages.list(threadId);
+                const inProgressMessages = messages.data
+                    .filter(message => message.run_id === run.id && message.role === "assistant");
+
+                for (const message of inProgressMessages) {
+                    const content = message.content[0]?.text?.value || "";
+                    const chunks = content.match(/.{1,4}/g) || [];
+
+                    for (const chunk of chunks) {
+                        res.write(`data: ${JSON.stringify({ content: chunk, status: 'in_progress' })}\n\n`);
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                }
             } else if (runStatus.status === 'failed') {
-                res.write(`data: ${JSON.stringify({ error: "Run failed" })}\n\n`);
+                res.write(`data: ${JSON.stringify({ error: "Run failed", status: 'failed' })}\n\n`);
                 break;
             }
             
-            // Wait for a short time before checking again
             await new Promise(resolve => setTimeout(resolve, 1000));
         }
     } catch (error) {
         console.error("Error during run:", error);
-        res.write(`data: ${JSON.stringify({ error: "An error occurred during processing" })}\n\n`);
+        res.write(`data: ${JSON.stringify({ error: "An error occurred during processing", status: 'error' })}\n\n`);
     }
 
     res.write('event: close\ndata: Stream finished\n\n');
@@ -106,7 +122,6 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
-
 
 
 // require('dotenv').config(); /// Load environment variables from .env file
