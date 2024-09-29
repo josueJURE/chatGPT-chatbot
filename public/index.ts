@@ -15,13 +15,13 @@ interface ChatgptData {
 }
 
 function createElement(classElement: string, textString: string) {
-  let div = document.createElement("textarea");
+  let textContainer = document.createElement("textarea");
   // let div = document.createElement("div");
-  div.setAttribute("disabled", "true");
-  div.classList.add(classElement);
-  div.value  += textString;
+  textContainer.setAttribute("disabled", "true");
+  textContainer.classList.add(classElement);
+  textContainer.value  += textString;
   // div.textContent  += textString;
-  return div;
+  return textContainer;
 }
 
 function appendElement(data: ChatgptData): void {
