@@ -16,11 +16,9 @@ interface ChatgptData {
 
 function createElement(classElement: string, textString: string) {
   let textContainer = document.createElement("textarea");
-  // let div = document.createElement("div");
   textContainer.setAttribute("disabled", "true");
   textContainer.classList.add(classElement);
   textContainer.value  += textString;
-  // div.textContent  += textString;
   return textContainer;
 }
 
