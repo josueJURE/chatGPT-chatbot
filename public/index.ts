@@ -27,7 +27,7 @@ function createElement(classElement: string, textString: string) {
 function appendElement(data: ChatgptData): void {
   if (responseElement instanceof HTMLElement) {
     data.role === "assistant"
-      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || ""))
+      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating text"))
       : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
   } else {
     console.error("Response element not found or is not an HTMLElement");
@@ -62,6 +62,9 @@ btn.addEventListener("click", () => {
     if (data.content) {
       if (responseElement.lastChild instanceof HTMLElement && responseElement.lastChild.classList.contains('assistantNewDiv')) {
         const textArea = responseElement.lastChild as HTMLTextAreaElement;
+        if(textArea.value !== "") {
+          textArea.value = ""
+        }
         textArea.value += data.content;
         if (data.status === 'in_progress') {
           textArea.classList.add('in-progress');

@@ -7,18 +7,18 @@ const inputAndButton = document.querySelector(".inputAndButton");
 // Generate a random user ID (in a real app, this would be a proper user authentication system)
 const userId = Math.random().toString(36).substring(7);
 function createElement(classElement, textString) {
-    let div = document.createElement("textarea");
+    let textContainer = document.createElement("textarea");
     // let div = document.createElement("div");
-    div.setAttribute("disabled", "true");
-    div.classList.add(classElement);
-    div.value += textString;
+    textContainer.setAttribute("disabled", "true");
+    textContainer.classList.add(classElement);
+    textContainer.value += textString;
     // div.textContent  += textString;
-    return div;
+    return textContainer;
 }
 function appendElement(data) {
     if (responseElement instanceof HTMLElement) {
         data.role === "assistant"
-            ? responseElement.appendChild(createElement("assistantNewDiv", data.text || ""))
+            ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating text"))
             : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
     }
     else {
@@ -44,6 +44,9 @@ btn.addEventListener("click", () => {
         if (data.content) {
             if (responseElement.lastChild instanceof HTMLElement && responseElement.lastChild.classList.contains('assistantNewDiv')) {
                 const textArea = responseElement.lastChild;
+                if (textArea.value !== "") {
+                    textArea.value = "";
+                }
                 textArea.value += data.content;
                 if (data.status === 'in_progress') {
                     textArea.classList.add('in-progress');
