@@ -9,23 +9,23 @@ const inputAndButton = document.querySelector(".inputAndButton") as HTMLElement;
 const userId = Math.random().toString(36).substring(7);
 
 interface ChatgptData {
-  text: string;
+  text?: string;
   role: "user" | "assistant";
   id?: string;
 }
 
 function createElement(classElement: string, textString: string) {
-  let div = document.createElement("textarea");
-  div.setAttribute("disabled", "true");
-  div.classList.add(classElement);
-  div.textContent = textString;
-  return div;
+  let textContainer = document.createElement("textarea");
+  textContainer.setAttribute("disabled", "true");
+  textContainer.classList.add(classElement);
+  textContainer.value  += textString;
+  return textContainer;
 }
 
 function appendElement(data: ChatgptData): void {
   if (responseElement instanceof HTMLElement) {
     data.role === "assistant"
-      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || ""))
+      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating2.0"))
       : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
   } else {
     console.error("Response element not found or is not an HTMLElement");
@@ -44,6 +44,7 @@ btn.addEventListener("click", () => {
 
   setElementDisplay(inputAndButton, "displayNone");
   appendElement({ text: userInput.value, role: "user" });
+  appendElement({role: "assistant"})
 
   
 
@@ -53,19 +54,36 @@ btn.addEventListener("click", () => {
 
 
 
-  let assistantResponse = '';
-
+  let isFirstResponse: boolean = true;
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if (data.content) {
-      assistantResponse += data.content;
-      // Update the response element with the current accumulated response
       if (responseElement.lastChild instanceof HTMLElement && responseElement.lastChild.classList.contains('assistantNewDiv')) {
-        (responseElement.lastChild as HTMLTextAreaElement).value = assistantResponse;
+        const textArea = responseElement.lastChild as HTMLTextAreaElement;
+        
+      if(isFirstResponse) {
+          textArea.value = ""
+
+      }
+        
+        
+        textArea.value += data.content;
+        if (data.status === 'in_progress') {
+          textArea.classList.add('in-progress');
+        } else if (data.status === 'completed') {
+          textArea.classList.remove('in-progress');
+        }
       } else {
-        appendElement({ text: assistantResponse, role: "assistant" });
+        const newElement = createElement("assistantNewDiv", data.content);
+        if (data.status === 'in_progress') {
+          newElement.classList.add('in-progress');
+        }
+        responseElement.appendChild(newElement);
       }
     }
+    isFirstResponse =false 
+
+
   };
 
   eventSource.onerror = (error) => {

@@ -105,3 +105,10 @@
         margin-top: 10px;
     }
 
+
+    .in-progress  {
+        background-color: #f11b29;
+        border-left: 3px solid #007bff;
+      }
+      
+
