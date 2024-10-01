@@ -97,6 +97,7 @@ app.get("/api", async (req, res) => {
                     const chunks = content.match(/.{1,4}/g) || [];
 
                     for (const chunk of chunks) {
+                        console.log(chunk)
                         res.write(`data: ${JSON.stringify({ content: chunk, status: 'in_progress' })}\n\n`);
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }

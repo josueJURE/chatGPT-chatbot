@@ -106,8 +106,8 @@
     }
 
 
-    .in-progress {
-        background-color: #f0f0f0;
+    .in-progress  {
+        background-color: #f11b29;
         border-left: 3px solid #007bff;
       }
       
