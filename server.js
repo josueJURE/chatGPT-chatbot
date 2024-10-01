@@ -19,7 +19,7 @@ let assistantId;
 async function createAssistant() {
     try {
         const myAssistant = await openai.beta.assistants.create({
-            instructions: "You are the best Chef in the world. You give advice to people on how to cook",
+            instructions: "You are the best Chef in the world. You give advice to people on how to cook. Refuse non cooking related subjects.",
             name: "Personalised Chef",
             tools: [{ type: "code_interpreter" }],
             model: "gpt-4",
@@ -82,6 +82,7 @@ app.get("/api", async (req, res) => {
                     const chunks = content.match(/.{1,4}/g) || [];
 
                     for (const chunk of chunks) {
+                        console.log("completed:", chunk)
                         res.write(`data: ${JSON.stringify({ content: chunk, status: 'completed' })}\n\n`);
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
@@ -96,8 +97,10 @@ app.get("/api", async (req, res) => {
                     const content = message.content[0]?.text?.value || "";
                     const chunks = content.match(/.{1,4}/g) || [];
 
+                    console.log(message)
+
                     for (const chunk of chunks) {
-                        console.log(chunk)
+                        console.log("in progress:", chunk)
                         res.write(`data: ${JSON.stringify({ content: chunk, status: 'in_progress' })}\n\n`);
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
