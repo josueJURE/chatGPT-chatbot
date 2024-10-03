@@ -25,7 +25,7 @@ function createElement(classElement: string, textString: string) {
 function appendElement(data: ChatgptData): void {
   if (responseElement instanceof HTMLElement) {
     data.role === "assistant"
-      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating recipe"))
+      ? responseElement.appendChild(createElement("assistantNewDiv", "generating recipe"))
       : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
   } else {
     console.error("Response element not found or is not an HTMLElement");
