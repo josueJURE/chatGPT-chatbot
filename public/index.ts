@@ -25,7 +25,7 @@ function createElement(classElement: string, textString: string) {
 function appendElement(data: ChatgptData): void {
   if (responseElement instanceof HTMLElement) {
     data.role === "assistant"
-      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating2.0"))
+      ? responseElement.appendChild(createElement("assistantNewDiv", data.text || "generating recipe"))
       : userInput.value !== "" && responseElement.appendChild(createElement("userNewDiv", userInput.value));
   } else {
     console.error("Response element not found or is not an HTMLElement");
@@ -81,7 +81,7 @@ btn.addEventListener("click", () => {
         responseElement.appendChild(newElement);
       }
     }
-    isFirstResponse =false 
+    isFirstResponse = false 
 
 
   };
@@ -103,6 +103,29 @@ btn.addEventListener("click", () => {
 function emptyElement(element: HTMLInputElement): void {
   element.value = "";
 }
+
+
+function add(...numbers: number[]) {
+  let sum = 0;
+  for (const n of numbers) {
+    sum += n;
+  }
+  return sum;
+}
+
+// console.log([add(), add(1, 2), add(100, 200, 300)])
+
+function addition(...numbers: number[]) {
+  let sum = 0;
+  for(let i = 0; i < numbers.length; i++) {
+    const currentValue = numbers[i];
+    sum += currentValue
+  }
+  return sum
+}
+
+console.log([addition(), add(1, 4), add(100, 200, 300)])
+
 
 
 
