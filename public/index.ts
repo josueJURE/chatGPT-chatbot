@@ -40,7 +40,7 @@ function setElementDisplay(element: HTMLElement | HTMLInputElement, display: str
 btn.addEventListener("click", () => {
   if (userInput.value === "") {
     return alert("enter your question please");
-  } else 
+  } 
 
   setElementDisplay(inputAndButton, "displayNone");
   appendElement({ text: userInput.value, role: "user" });
