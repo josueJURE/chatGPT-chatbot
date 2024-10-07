@@ -4,6 +4,7 @@ const app = express();
 const path = require("path");
 app.use(express.json());
 const { OpenAI } = require("openai");
+const { threadId } = require('worker_threads');
 
 const openai = new OpenAI({
     apiKey: process.env.openaiAPI,
@@ -40,6 +41,19 @@ async function chunkText(res, content, status) {
             res.write(`data: ${JSON.stringify({content: chunk.trim(), status: status})}\n\n`);
         }
     }
+}
+
+// async function createMessages(threadId, runId) {
+//     const messages = await openai.beta.threads.messages.list(threadId);
+//     const messageForRun = messages.data
+//     .filter(message => message.run_id === run.id && message.role === "assistant");
+//     return messageForRun
+// }
+
+async function createMessages(threadId, runId) {
+    const messages = await openai.beta.threads.messages.list(threadId);
+    return messages.data
+        .filter(message => message.run_id === runId && message.role === "assistant");
 }
 
 app.get("/api", async (req, res) => {
@@ -81,22 +95,29 @@ app.get("/api", async (req, res) => {
             const runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
             
             if (runStatus.status === 'completed') {
-                const messages = await openai.beta.threads.messages.list(threadId);
-                const lastMessageForRun = messages.data
-                    .filter(message => message.run_id === run.id && message.role === "assistant")
-                    .pop();
+                // const messages = await openai.beta.threads.messages.list(threadId);
+                // const lastMessageForRun = messages.data
+                //     .filter(message => message.run_id === run.id && message.role === "assistant")
+                //     .pop();
+                // await createMessages().pop()
 
-                if (lastMessageForRun) {
+                const messagesForRun = await createMessages(threadId, run.id);
+                const lastMessageForRun = messagesForRun.pop();
+
+
+                if (lastMessageForRun ) {
                     const content = lastMessageForRun.content[0]?.text?.value || "";
                     await chunkText(res, content, 'completed');
                 }
                 break;
             } else if (runStatus.status === 'in_progress') {
-                const messages = await openai.beta.threads.messages.list(threadId);
-                const inProgressMessages = messages.data
-                    .filter(message => message.run_id === run.id && message.role === "assistant");
+                const messagesForRun = await createMessages(threadId, run.id);
+                // const messages = await openai.beta.threads.messages.list(threadId);
+                // const inProgressMessages = messages.data
+                //     .filter(message => message.run_id === run.id && message.role === "assistant");
+                await createMessages(threadId, run.id)
 
-                for (const message of inProgressMessages) {
+                for (const message of messagesForRun) {
                     const content = message.content[0]?.text?.value || "";
                     await chunkText(res, content, 'in_progress');
                 }
