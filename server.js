@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require("express");
 const app = express();
@@ -32,6 +31,16 @@ async function createAssistant() {
 }
 
 createAssistant();
+
+// Move chunkText outside the route handler
+async function chunkText(res, content, status) {
+    const chunks = content.split(/(?<=\.\s|\?\s|\!\s)/g); // Split on sentence endings
+    for (const chunk of chunks) {
+        if (chunk.trim()) {
+            res.write(`data: ${JSON.stringify({content: chunk.trim(), status: status})}\n\n`);
+        }
+    }
+}
 
 app.get("/api", async (req, res) => {
     const { input, userId } = req.query;
@@ -79,13 +88,7 @@ app.get("/api", async (req, res) => {
 
                 if (lastMessageForRun) {
                     const content = lastMessageForRun.content[0]?.text?.value || "";
-                    const chunks = content.match(/.{1,4}/g) || [];
-
-                    for (const chunk of chunks) {
-                        console.log("completed:", chunk)
-                        res.write(`data: ${JSON.stringify({ content: chunk, status: 'completed' })}\n\n`);
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    }
+                    await chunkText(res, content, 'completed');
                 }
                 break;
             } else if (runStatus.status === 'in_progress') {
@@ -95,15 +98,7 @@ app.get("/api", async (req, res) => {
 
                 for (const message of inProgressMessages) {
                     const content = message.content[0]?.text?.value || "";
-                    const chunks = content.match(/.{1,4}/g) || [];
-
-                    console.log(message)
-
-                    for (const chunk of chunks) {
-                        console.log("in progress:", chunk)
-                        res.write(`data: ${JSON.stringify({ content: chunk, status: 'in_progress' })}\n\n`);
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    }
+                    await chunkText(res, content, 'in_progress');
                 }
             } else if (runStatus.status === 'failed') {
                 res.write(`data: ${JSON.stringify({ error: "Run failed", status: 'failed' })}\n\n`);
@@ -126,6 +121,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
+
 
 
 
