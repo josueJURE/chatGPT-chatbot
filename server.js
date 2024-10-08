@@ -34,21 +34,16 @@ async function createAssistant() {
 createAssistant();
 
 // Move chunkText outside the route handler
-async function chunkText(res, content, status) {
+function chunkText(res, content, status) {
     const chunks = content.split(/(?<=\.\s|\?\s|\!\s)/g); // Split on sentence endings
     for (const chunk of chunks) {
+        console.log(chunk)
         if (chunk.trim()) {
             res.write(`data: ${JSON.stringify({content: chunk.trim(), status: status})}\n\n`);
         }
     }
 }
 
-// async function createMessages(threadId, runId) {
-//     const messages = await openai.beta.threads.messages.list(threadId);
-//     const messageForRun = messages.data
-//     .filter(message => message.run_id === run.id && message.role === "assistant");
-//     return messageForRun
-// }
 
 async function createMessages(threadId, runId) {
     const messages = await openai.beta.threads.messages.list(threadId);
@@ -107,7 +102,7 @@ app.get("/api", async (req, res) => {
 
                 if (lastMessageForRun ) {
                     const content = lastMessageForRun.content[0]?.text?.value || "";
-                    await chunkText(res, content, 'completed');
+                    chunkText(res, content, 'completed');
                 }
                 break;
             } else if (runStatus.status === 'in_progress') {
@@ -119,7 +114,7 @@ app.get("/api", async (req, res) => {
 
                 for (const message of messagesForRun) {
                     const content = message.content[0]?.text?.value || "";
-                    await chunkText(res, content, 'in_progress');
+                    chunkText(res, content, 'in_progress');
                 }
             } else if (runStatus.status === 'failed') {
                 res.write(`data: ${JSON.stringify({ error: "Run failed", status: 'failed' })}\n\n`);
