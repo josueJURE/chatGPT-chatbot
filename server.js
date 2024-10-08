@@ -4,7 +4,6 @@ const app = express();
 const path = require("path");
 app.use(express.json());
 const { OpenAI } = require("openai");
-const { threadId } = require('worker_threads');
 
 const openai = new OpenAI({
     apiKey: process.env.openaiAPI,
@@ -90,12 +89,6 @@ app.get("/api", async (req, res) => {
             const runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
             
             if (runStatus.status === 'completed') {
-                // const messages = await openai.beta.threads.messages.list(threadId);
-                // const lastMessageForRun = messages.data
-                //     .filter(message => message.run_id === run.id && message.role === "assistant")
-                //     .pop();
-                // await createMessages().pop()
-
                 const messagesForRun = await createMessages(threadId, run.id);
                 const lastMessageForRun = messagesForRun.pop();
 
@@ -107,9 +100,6 @@ app.get("/api", async (req, res) => {
                 break;
             } else if (runStatus.status === 'in_progress') {
                 const messagesForRun = await createMessages(threadId, run.id);
-                // const messages = await openai.beta.threads.messages.list(threadId);
-                // const inProgressMessages = messages.data
-                //     .filter(message => message.run_id === run.id && message.role === "assistant");
                 await createMessages(threadId, run.id)
 
                 for (const message of messagesForRun) {
