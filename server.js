@@ -50,6 +50,13 @@ async function createMessages(threadId, runId) {
         .filter(message => message.run_id === runId && message.role === "assistant");
 }
 
+
+function createContent(messageParam) {
+    const content = messageParam.content[0]?.text?.value || "";
+    return content
+
+}
+
 app.get("/api", async (req, res) => {
     const { input, userId } = req.query;
 
@@ -92,9 +99,12 @@ app.get("/api", async (req, res) => {
                 const messagesForRun = await createMessages(threadId, run.id);
                 const lastMessageForRun = messagesForRun.pop();
 
+             
+
 
                 if (lastMessageForRun ) {
-                    const content = lastMessageForRun.content[0]?.text?.value || "";
+                    // const content = lastMessageForRun.content[0]?.text?.value || "";
+                    const content = createContent(lastMessageForRun)
                     chunkText(res, content, 'completed');
                 }
                 break;
@@ -103,7 +113,8 @@ app.get("/api", async (req, res) => {
                 await createMessages(threadId, run.id)
 
                 for (const message of messagesForRun) {
-                    const content = message.content[0]?.text?.value || "";
+                    // const content = message.content[0]?.text?.value || "";
+                    const content = createContent(message)
                     chunkText(res, content, 'in_progress');
                 }
             } else if (runStatus.status === 'failed') {
