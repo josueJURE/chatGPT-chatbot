@@ -32,11 +32,12 @@ async function createAssistant() {
 
 createAssistant();
 
-// Move chunkText outside the route handler
+
 function chunkText(res, content, status) {
+    // const chunks = content.match(/.{1,4}/g) || [];
     const chunks = content.split(/(?<=\.\s|\?\s|\!\s)/g); // Split on sentence endings
     for (const chunk of chunks) {
-        console.log(chunk)
+        console.log(`$empty chunks ${chunk}`)
         if (chunk.trim()) {
             res.write(`data: ${JSON.stringify({content: chunk.trim(), status: status})}\n\n`);
         }

@@ -105,25 +105,6 @@ function emptyElement(element: HTMLInputElement): void {
 }
 
 
-function add(...numbers: number[]) {
-  let sum = 0;
-  for (const n of numbers) {
-    sum += n;
-  }
-  return sum;
-}
 
-// console.log([add(), add(1, 2), add(100, 200, 300)])
-
-function addition(...numbers: number[]) {
-  let sum = 0;
-  for(let i = 0; i < numbers.length; i++) {
-    const currentValue = numbers[i];
-    sum += currentValue
-  }
-  return sum
-}
-
-console.log([addition(), add(1, 4), add(100, 200, 300)])
 
 
