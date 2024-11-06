@@ -82,12 +82,14 @@ app.get("/api", async (req, res) => {
             
             if (runStatus.status === 'completed') {
                 const messages = await openai.beta.threads.messages.list(threadId);
+                console.log(messages)
                 const lastMessageForRun = messages.data
                     .filter(message => message.run_id === run.id && message.role === "assistant")
                     .pop();
 
                 if (lastMessageForRun) {
                     const content = lastMessageForRun.content[0]?.text?.value || "";
+                    console.log(messages)
                     await chunkText(res, content, 'completed');
                 }
                 break;
